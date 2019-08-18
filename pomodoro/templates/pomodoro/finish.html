@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load pomodoro_extras %}
+{% block title %} - Timeout{% endblock %}
+
+{% block content %}
+<style>
+    .btn-blue-right-section {
+        text-align: center;
+        padding: 4px 10px 5px 10px;
+        margin-right: 10px;
+        border-right: 1px solid white;
+    }
+</style>
+<div class="row">
+
+    <!-- <div class="center-panel"> -->
+    <div class="col-md-6">
+        <div class="alert alert-info">
+            <h2>{{task.project.title}}</h2>
+            <h3>{{task.title}}</h3>
+
+        </div>
+        <div class="alert alert-success">
+            <h2>Timeout!</h2>
+            <h3>Passed Time: {{passed_time|format_duration}}</h3>
+            <form action="{% url 'pomodoro:start' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="taskid" value="{{task.id}}">
+                <button class="btn btn-primary" type="submit"><i class="fa fa-play-circle-o"></i> New Session</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-6">
+
+        <div class="col-md-12">
+            <a href="{% url 'pomodoro:task-detail' task.pk %}" class="btn btn-primary" role="button">
+                <span class="btn-blue-right-section fa fa-clock-o"> {{task.duration|format_duration}}</span>
+                Show Task Detail
+            </a>
+
+        </div>
+        <div class="col-md-12">
+            <a href="{% url 'pomodoro:project-detail' task.project.pk %}" class="btn btn-primary">
+                <span class="btn-blue-right-section fa fa-clock-o">
+                    {{ task.project.passed_time|format_duration }}</span>
+                Show Project Detail
+            </a>
+        </div>
+        <div class="col-md-12">
+            <a href="{% url 'pomodoro:home' %}" class="btn btn-primary">
+                <span class="btn-blue-right-section fa fa-home"></span>
+                Return to Home Page
+            </a>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <!-- </div> -->
+</div>
+
+
+
+</div>
+{% endblock %}
+{% block scripts %}
+{{ block.super }}
+<script src="{% static 'js/notify.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        notifyMe('Countdown Finished')
+    });
+</script>
+{% endblock scripts %}

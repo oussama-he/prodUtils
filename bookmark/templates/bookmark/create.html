@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>
+<h2>{{title}}</h2>
+<div class="col-md-6 col-md-auto">
+    <form method="POST" novalidate >
+        {% csrf_token %}
+
+        {% include 'includes/bs4_form.html' with form=form %}
+        <button class="btn btn-primary" type="submit">Add</button>
+    </form>
+</div>
+{% endblock %}
+

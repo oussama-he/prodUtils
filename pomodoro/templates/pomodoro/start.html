@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} - Working - {{task.name}}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="center-panel">
+            <h1>{{task.project.title}}</h1>
+            <h2>{{task.title}}</h2>
+            <h1 id="counter" data-timeout="{{timeout_work}}" data-submit-form="#finishForm">{{timeout_work}}:00</h1>
+            <button class="btn btn-danger" name="btn-stop" id="btn-stop">
+            <i class='fa fa-stop'></i>
+            Stop</button>
+            <form id="finishForm" action="{% url 'pomodoro:finish' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="taskid" value="{{task.id}}"/>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script src="{% static 'js/notify.js' %}"></script>
+<script>
+$(document).ready(function(){
+
+    function getTimeWork() {
+        var timeout = $('#counter').data("timeout")
+        return new Date(new Date().valueOf() + timeout * 60 * 1000)
+    }
+
+        var $counter = $("#counter")
+        var timeout = $('#counter').data("timeout")
+        var before5MinToFinish = new Date().getTime() + (timeout - 5) * 60 * 1000
+        before5MinToFinish = Math.floor(before5MinToFinish / 1000)
+
+    $counter.countdown(getTimeWork(), function(event) {
+        $(this).html(event.strftime('%M:%S'));
+
+        $('head title', window.parent.document).text(event.strftime('%M:%S'));
+        // use .toString() to compare date
+        if ( Math.floor(new Date().getTime() / 1000) == before5MinToFinish ) {
+            notifyMe('5 Minutes to Finish Countdown')
+        }
+
+        if (event.type == 'finish') {
+            // $($('#counter').data("submit-form")=>#finishForm).submit();
+            // => $('#finishForm').submit()
+            $($('#counter').data("submit-form")).submit();
+        }
+    });
+
+        $('#btn-reset').click(function() {
+            $counter.countdown(getTimeWork());
+        });
+
+        $('#btn-pause').click(function() {
+            $counter.countdown('pause');
+        });
+
+        $('#btn-stop').click(function() {
+            $counter.countdown('stop');
+            $($('#counter').data("submit-form")).submit();
+        });
+});
+</script>
+{% endblock scripts %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load pomodoro_extras %}
+
+{% block content %}
+<div class="col-sm-6 col-sm-offset-3">
+    <h3>Confirm Delete <i class="fa fa-trash"></i></h3>
+
+    <form action="." method="post">{% csrf_token %}
+        <div class="alert alert-danger">
+            <p>
+                Are you sure you want to delete
+                <a href="{{object.get_absolute_url}}" class="text-danger">
+                    <strong>{{object.title|title}}</strong>
+                </a>
+                {{type}}
+            </p>
+            <p>
+                <i class="fa fa-exclamation-circle"></i> This means that you will lose all the histories of
+                <a href="{{object.get_absolute_url}}" class="text-danger">
+                    <strong>{{object.title|title}} {{object|to_class_name}}</strong>
+                </a>
+                {{type}}
+            </p>
+        </div>
+        <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>
+        <a href="{{object.get_absolute_url}}" class="btn btn-default" type="submit">Cancel</a>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-4 col-md-4">
+        <h2>Add New Expense</h2>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {% include 'includes/bs4_form.html' with form=form %}
+            <button class="btn btn-primary">Submit</button>
+        </form>
+    </div>    
+
+    <div class="col-8 col-md-8">
+        <h2>Total Expense: <strong>{{total_expenses}}</strong></h2>
+
+        <table class="table table-stripped table-bordered table-hover table-dark table-scroll" style="height: 430px">
+            <thead style="width: 100%">
+                <tr>
+                    <td>Category</td>
+                    <td>Cost</td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.title}}</td>
+                    <td>{{category.get_total_cost}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <p></p>
+
+    
+</div>
+
+
+<br>
+<br>
+
+<table class="table">
+    <thead class="table-primary">
+    <tr>
+        <th>Cost</th>
+        <th>Category</th>
+        <th>Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for expense in expenses %}
+    <tr>
+        <td>{{expense.cost}}</td>
+        <td>{{expense.category}}</td>
+        <td>{{expense.timestamp}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock content %}

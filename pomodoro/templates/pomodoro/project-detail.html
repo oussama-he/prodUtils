@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load pomodoro_extras %}
+{% block content %}
+<div class="row">
+    <h2>
+        {{ project.title }} <small>{{project.created_at}}</small>
+        <a href="{% url 'pomodoro:project-delete' project.pk %}">
+            <i class="fa fa-trash text-danger"></i>
+        </a>
+    </h2>
+    <hr>
+    <h4>
+        <b>Total duration </b>{{project.passed_time|format_duration}}
+    </h4>
+</div>
+
+<div class="row">
+
+    {% for task in project.task_set.all %}
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-header text-white bg-primary">
+                {{ task.title }}
+                <div class="pull-right">
+                    <a href="{{task.get_absolute_url}}" style="color:white"><i class="fa fa-bar-chart"></i> Detail</a>
+                    <a href="" style="color:white"><i class="fa fa-trash"></i> Delete</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <p><b>Total Duration: </b>{{task.duration|format_duration}}</p>
+                <p><b>Nbr of start: </b>{{task.history_set.all.count}} times</p>
+                <p><b>First Start: </b>{{task.history_set.first.start_time}}</p>
+                <p><b>Last Finish: </b>{{task.history_set.last.finish_time}}</p>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>No Task</p>
+    {% endfor %}
+</div>
+{% endblock %}

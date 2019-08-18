@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load pomodoro_extras %}
+{% block stylesheet_extras %}
+<link rel="stylesheet" href="{% static 'css/table-panel.css' %}">
+{% endblock stylesheet_extras %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <table class="table table-striped table-bordered table-list">
+                  <thead>
+                    <tr>
+                        <th></th>
+                        <th>Project</th>
+                        <th>Tasks</th>
+                        <th>Passed Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                        {% for project in projects %}
+                          <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{project.title|title}}</td>
+                            <td>
+                                <a href="{% url 'pomodoro:tasks' pk=project.pk %}">See the all {{project.task_count}} tasks</a>
+                            </td>
+                            <td>{{project.passed_time|format_duration}}</td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

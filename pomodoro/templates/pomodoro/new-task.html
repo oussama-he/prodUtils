@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="col-md-6  col-md-offset-3">
+    <h1>Add New Task</h1>
+    <form action="." method="post">{% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12">{{ form|as_crispy_errors:"bootstrap3" }}</div>
+            <div class="col-sm-9">{{ form.project|as_crispy_field }}</div>
+            <div class="col-sm-3" id="add-new">
+                <h4>
+                    <a href="{% url 'pomodoro:new-project' %}"><i class="fa fa-plus-circle"></i> New</a>
+                </h4>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-12">{{ form.title|as_crispy_field }}</div>
+        </div>
+
+        <div class="col-sm-4">
+            <button class="btn btn-primary btn-block" type="submit">Add</button>
+        </div>
+
+    </form>
+
+
+</div>
+{% endblock content %}

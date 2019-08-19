@@ -30,4 +30,9 @@ $(document).ready(function() {
         })
     })
 
+    // enable tooltip everywhere
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+
 });

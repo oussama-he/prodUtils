@@ -2,8 +2,8 @@
 {% load pomodoro_extras %}
 
 {% block content %}
-<div class="col-sm-6 col-sm-offset-3">
-    <h3>Confirm Delete <i class="fa fa-trash"></i></h3>
+<div class="col-6 offset-3">
+    <h3 class="text-danger">Confirm Delete <i class="fa fa-trash"></i></h3>
 
     <form action="." method="post">{% csrf_token %}
         <div class="alert alert-danger">
@@ -22,8 +22,10 @@
                 {{type}}
             </p>
         </div>
-        <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>
-        <a href="{{object.get_absolute_url}}" class="btn btn-default" type="submit">Cancel</a>
+        <div class="float-right">
+            <a href="{{object.get_absolute_url}}" class="btn btn-default">Cancel</a>
+            <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i> Delete</button>
+        </div>
     </form>
 </div>
 

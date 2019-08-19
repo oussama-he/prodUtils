@@ -3,35 +3,34 @@
 {% load pomodoro_extras %}
 {% block content %}
 <div class="row">
-    <h2>
-        {{ project.title }} <small>{{project.created_at}}</small>
+    <h2 class="col-12">
+        <strong>{{ project.title }}</strong> <small>{{project.created_at}}</small>
         <a href="{% url 'pomodoro:project-delete' project.pk %}">
             <i class="fa fa-trash text-danger"></i>
         </a>
     </h2>
-    <hr>
-    <h4>
-        <b>Total duration </b>{{project.passed_time|format_duration}}
-    </h4>
+    <h2 class="col-12">
+        <strong>Total duration </strong>{{project.passed_time|format_duration}}
+    </h2>
 </div>
 
 <div class="row">
 
     {% for task in project.task_set.all %}
-    <div class="col-sm-4">
+    <div class="col-sm-12 col-md-6 col-lg-4">
         <div class="card">
-            <div class="card-header text-white bg-primary">
-                {{ task.title }}
-                <div class="pull-right">
-                    <a href="{{task.get_absolute_url}}" style="color:white"><i class="fa fa-bar-chart"></i> Detail</a>
-                    <a href="" style="color:white"><i class="fa fa-trash"></i> Delete</a>
+            <div class="card-header text-white bg-dark">
+                <h6 class="float-left" data-toggle='tooltip' data-placement='top' title="{{task.title}}">{{ task.title|truncatechars:25 }}</h6>
+                <div class="float-right">
+                    <a class="text-light" href="{{task.get_absolute_url}}"><i class="fa fa-bar-chart"></i> Detail</a>
+                    <a class="text-light" href="{% url 'pomodoro:task-delete' task.pk %}"><i class="fa fa-trash"></i> Delete</a>
                 </div>
             </div>
             <div class="card-body">
                 <p><b>Total Duration: </b>{{task.duration|format_duration}}</p>
-                <p><b>Nbr of start: </b>{{task.history_set.all.count}} times</p>
-                <p><b>First Start: </b>{{task.history_set.first.start_time}}</p>
-                <p><b>Last Finish: </b>{{task.history_set.last.finish_time}}</p>
+                <p><b>Nbr of Sessions: </b>{{task.session_set.all.count}}<p>
+                <p><b>First Start: </b>{{task.session_set.first.start_time}}</p>
+                <p><b>Last Finish: </b>{{task.session_set.last.finish_time}}</p>
             </div>
         </div>
     </div>

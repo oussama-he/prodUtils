@@ -3,11 +3,11 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<div class="col-md-6 col-md-offset-3">
-    <h1>Add New Project</h1>
+<div class="col-md-6 offset-md-3">
+    <h1>Create a New Project</h1>
     <form action="" method="post">{% csrf_token %}
         {{ form|crispy }}
-        <button class="btn btn-primary" type="submit">Add</button>
+        <button class="btn btn-primary float-right" type="submit">Create</button>
     </form>
 </div>
 {% endblock %}

@@ -31,14 +31,14 @@
         <a href="{% url 'pomodoro:project-detail' task.project.pk %}" class="btn btn-primary">
             <span class="btn-blue-right-section fa fa-clock-o">
                 {{ task.project.passed_time|format_duration }}</span>
-            Show Project Detail
+            Show Project Details
         </a>
         <br>
         <br>
         
         <a href="{% url 'pomodoro:task-detail' task.pk %}" class="btn btn-primary" role="button">
             <span class="btn-blue-right-section fa fa-clock-o"> {{task.duration|format_duration}}</span>
-            Show Task Detail
+            Show Task Sessions
         </a>
         <br>
         <br>

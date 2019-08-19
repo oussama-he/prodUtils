@@ -36,7 +36,7 @@
         <form action="{% url 'pomodoro:start' %}" method="post">
             {% csrf_token %}
             <input type="hidden" name="taskid" value="{{task.id}}">
-            <button class="btn btn-primary btn-sm float-md-right"><i class="fa fa-play-circle-o"> New Session</i></button>
+            <button class="btn btn-primary btn-sm float-md-right"><i class="fa fa-play-circle-o"></i> New Session</button>
         </form>
     </div>
 

@@ -19,56 +19,47 @@
         <div class="alert alert-info">
             <h2>{{task.project.title}}</h2>
             <h3>{{task.title}}</h3>
-
         </div>
+
         <div class="alert alert-success">
             <h2>Timeout!</h2>
             <h3>Passed Time: {{passed_time|format_duration}}</h3>
-            <form action="{% url 'pomodoro:start' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="taskid" value="{{task.id}}">
-                <button class="btn btn-primary" type="submit"><i class="fa fa-play-circle-o"></i> New Session</button>
-            </form>
         </div>
     </div>
+    
     <div class="col-md-6">
+        <a href="{% url 'pomodoro:project-detail' task.project.pk %}" class="btn btn-primary">
+            <span class="btn-blue-right-section fa fa-clock-o">
+                {{ task.project.passed_time|format_duration }}</span>
+            Show Project Detail
+        </a>
+        <br>
+        <br>
+        
+        <a href="{% url 'pomodoro:task-detail' task.pk %}" class="btn btn-primary" role="button">
+            <span class="btn-blue-right-section fa fa-clock-o"> {{task.duration|format_duration}}</span>
+            Show Task Detail
+        </a>
+        <br>
+        <br>
 
-        <div class="col-md-12">
-            <a href="{% url 'pomodoro:task-detail' task.pk %}" class="btn btn-primary" role="button">
-                <span class="btn-blue-right-section fa fa-clock-o"> {{task.duration|format_duration}}</span>
-                Show Task Detail
-            </a>
+        <a href="{% url 'pomodoro:home' %}" class="btn btn-primary">
+            <span class="btn-blue-right-section fa fa-home"></span>
+            Return to Home Page
+        </a>
+        <br>
+        <br>
 
-        </div>
-        <div class="col-md-12">
-            <a href="{% url 'pomodoro:project-detail' task.project.pk %}" class="btn btn-primary">
-                <span class="btn-blue-right-section fa fa-clock-o">
-                    {{ task.project.passed_time|format_duration }}</span>
-                Show Project Detail
-            </a>
-        </div>
-        <div class="col-md-12">
-            <a href="{% url 'pomodoro:home' %}" class="btn btn-primary">
-                <span class="btn-blue-right-section fa fa-home"></span>
-                Return to Home Page
-            </a>
-        </div>
+        <form action="{% url 'pomodoro:start' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="taskid" value="{{task.id}}">
+            <button class="btn btn-primary" type="submit"><i class="fa fa-play-circle-o"></i> New Session</button>
+        </form>
     </div>
-
-
-
-
-
-
-
-
-    <!-- </div> -->
 </div>
-
-
-
 </div>
 {% endblock %}
+
 {% block scripts %}
 {{ block.super }}
 <script src="{% static 'js/notify.js' %}"></script>

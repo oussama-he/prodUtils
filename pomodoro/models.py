@@ -71,7 +71,10 @@ class Session(models.Model):
         else:
                return -1
         return delta.total_seconds()
-
+    
+    def get_absolute_url(self):
+        return reverse("pomodoro:task-detail", kwargs={'pk': self.task.pk})
+    
     def __str__(self):
         return self.task.title
 

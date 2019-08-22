@@ -12,3 +12,10 @@ class ExpenseForm(forms.ModelForm):
         widgets = {
             'notes': forms.Textarea(attrs={'rows': 4, }),
         }
+
+
+class EditExpenseForm(forms.ModelForm):
+
+    class Meta:
+        model = Expense
+        exclude = ['added_at']

@@ -1,9 +1,12 @@
 from django.db import models
+from django.core.urlresolvers import reverse
+from django.utils.text import slugify
 
 
 class Category(models.Model):
     title = models.CharField(max_length=55)
     description = models.TextField(blank=True)
+    slug = models.SlugField(unique=False)
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
 
     def __str__(self):
@@ -15,6 +18,13 @@ class Category(models.Model):
         for expense in expenses:
             total += expense.cost
         return total
+
+    def get_absolute_url(self):
+        return reverse('budget:category-details', kwargs={'slug': slugify(self.title)})
+
+    class Meta:
+        verbose_name_plural = 'categories'
+
 
 class Expense(models.Model):
     cost = models.IntegerField()

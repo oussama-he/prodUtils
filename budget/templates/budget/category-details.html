@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12 col-md-10 offset-1">
+        <h2>
+            {{ category }} <small>{{ category.get_total_cost }} DA</small>
+            <a href="{% url 'budget:home' %}" class="btn btn-default text-primary float-right"><i class="fa fa-plus"></i> Add Expense</a>        
+        </h2>
+        <table class="table table-stripped table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th></th>
+                    <th>Cost</th>
+                    <th>Date</th>
+                    <th>Notes</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody class="table-info">
+                {% for expense in category.expense_set.all %}
+                <tr>
+                    <td>{{forloop.revcounter}}</td>
+                    <td>{{ expense.cost }}</td>
+                    <td>{{ expense.timestamp }}</td>
+                    <td>{{expense.notes}}</td>
+                    <td class='text-center'><a href="{% url 'budget:edit-expense' pk=expense.pk %}"><i class="fa fa-pencil fa-lg"></i></a></td>
+                    <td class='text-center'><a href="{% url 'budget:delete-expense' pk=expense.pk %}"><i class="fa fa-trash text-danger fa-lg"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock %}

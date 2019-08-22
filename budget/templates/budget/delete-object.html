@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-8 col-md-6 offset-2 offset-md-3">
+        <h3><i class="fa fa-trash text-danger"></i> Confirm Delete</h3>
+        <div class="alert alert-danger">
+            <p>Are you sure want to delete this object?</p>
+            <p class="font-weight-bold"><i class="fa fa-info"></i> This means that you loose this object permanently.</p>
+        </div>
+        <form action="." method="POST">{% csrf_token %}
+            <div class="float-right">
+                <a href="{{ object.category.get_absolute_url }}" class="btn btn-default text-primary">Cancel</a>
+                <button type="submit" class="btn btn-danger font-weight-bold"><i class="fa fa-trash"></i> Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

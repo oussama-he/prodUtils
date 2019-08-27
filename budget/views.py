@@ -1,12 +1,14 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Expense, Category
-from .forms import ExpenseForm, EditExpenseForm
+from .forms import ExpenseForm, EditExpenseForm, CategoryForm
 
 
 def home(request):
     categories = Category.objects.all()
     total_expenses = 0
+    category_form = CategoryForm()
     for category in categories:
         total_expenses += category.get_total_cost()
 
@@ -23,7 +25,21 @@ def home(request):
         'form': form,
         'total_expenses': total_expenses,
         'categories': categories,
+        'category_form': category_form
     })
+
+
+def create_category_view(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.save()
+            return JsonResponse({"status": "ok"}, safe=False, status=201)
+        else:
+            errors = form.errors.as_json()
+            return JsonResponse(errors, safe=False, status=500)
+    # return redirect('budget:home')
 
 
 def category_details(request, slug):

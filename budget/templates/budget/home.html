@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
@@ -13,7 +14,10 @@
     </div>    
 
     <div class="col-8 col-md-8">
-        <h2>Total Expense: <strong>{{total_expenses}} DA</strong></h2>
+        <h2>
+            Total Expense: <strong>{{total_expenses}} DA</strong>
+            <a href='' class="btn btn-primary float-right"  data-toggle="modal" data-target="#new-category-modal"><i class="fa fa-plus-o"></i> New Category</a>
+        </h2>
 
         <table class="table table-stripped table-bordered table-hover table-scroll" style="height: 430px">
             <thead class="table-dark">
@@ -36,4 +40,33 @@
     </div>
 </div>
 
+<div class="modal fade" tabindex="-1" role="dialog" id="new-category-modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create a New Category</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/budget/category/new/" method="POST" id="new-category-form" novalidate>{% csrf_token %}
+
+            <div class="modal-body">
+                  {% include 'budget/includes/_form.html' with form=category_form %}
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="new-category-submit">Create</button>
+            </div>
+      </form>
+
+      </div>
+    </div>
+  </div>
+
 {% endblock content %}
+
+{% block scripts_extras %}
+<script src="{% static 'budget/js/budget.js' %}"></script>
+{% endblock %}

@@ -1,12 +1,14 @@
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.db.models.signals import pre_save
 from django.utils.text import slugify
+from utils.utils import generate_random_str
 
 
 class Category(models.Model):
     title = models.CharField(max_length=55)
     description = models.TextField(blank=True)
-    slug = models.SlugField(unique=False)
+    slug = models.SlugField(unique=True)
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
 
     def __str__(self):
@@ -20,7 +22,7 @@ class Category(models.Model):
         return total
 
     def get_absolute_url(self):
-        return reverse('budget:category-details', kwargs={'slug': slugify(self.title)})
+        return reverse('budget:category-details', kwargs={'slug': self.slug})
 
     class Meta:
         verbose_name_plural = 'categories'
@@ -39,3 +41,15 @@ class Expense(models.Model):
     class Meta:
         ordering = ['-timestamp', ]
 
+
+def pre_save_category_receiver(sender, instance, *args, **kwargs):
+    slug = slugify(instance.title)
+    queryset = Category.objects.filter(slug=slug).order_by('-pk')
+
+    if queryset.exists():
+        slug = "%s-%s" % (slug, generate_random_str())
+
+    instance.slug = slug
+
+
+pre_save.connect(pre_save_category_receiver, sender=Category)

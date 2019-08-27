@@ -10,7 +10,7 @@
         </div>
         <form action="." method="POST">{% csrf_token %}
             <div class="float-right">
-                <a href="{{ object.category.get_absolute_url }}" class="btn btn-default text-primary">Cancel</a>
+                <a href="javascript:history.go(-1)" class="btn btn-default text-primary">Cancel</a>
                 <button type="submit" class="btn btn-danger font-weight-bold"><i class="fa fa-trash"></i> Delete</button>
             </div>
         </form>

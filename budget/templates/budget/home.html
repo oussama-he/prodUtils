@@ -25,6 +25,7 @@
                     <th>Category</th>
                     <th>Total</th>
                     <th>Details</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody class="table-info">
@@ -33,6 +34,7 @@
                     <td>{{ category.title}}</td>
                     <td>{{category.get_total_cost}}</td>
                     <td><a href="{{ category.get_absolute_url }}">See Details</a></td>
+                    <td class="text-center"><a href="{% url 'budget:delete-category' pk=category.pk %}"><i class="fa fa-trash fa-lg text-danger"></i></a></td>
                 </tr>
             {% endfor %}
             </tbody>

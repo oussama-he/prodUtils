@@ -65,6 +65,7 @@ def edit_expense(request, pk):
         'expense': expense
     })
 
+
 def delete_expense(request, pk):
     expense = get_object_or_404(Expense, pk=pk)
 
@@ -75,3 +76,13 @@ def delete_expense(request, pk):
     return render(request, 'budget/delete-object.html', {
         'object': expense
     })
+
+
+def delete_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+
+    if request.method == 'POST':
+        category.delete()
+        return redirect('budget:home')
+
+    return render(request, 'budget/delete-object.html', {'object': category})

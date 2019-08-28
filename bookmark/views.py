@@ -53,7 +53,9 @@ def create_category(request):
 
 def archive(request, pk):
     bookmark = get_object_or_404(Bookmark, pk=pk)
-    bookmark.archive = True
-    bookmark.save()
-    return redirect('bookmark:home')
+    if request.method == 'POST':
+        bookmark.archive = True
+        bookmark.save()
+        return redirect('bookmark:home')
 
+    return render(request, 'bookmark/archive.html', {'bookmark': bookmark})

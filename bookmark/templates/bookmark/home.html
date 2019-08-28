@@ -12,34 +12,38 @@
 
     <div class="table-responsive">
         <h2>{{category.name}}</h2>
-                <table class="table table-striped table-bordered table-hover table-scroll">
-                    <thead>
-                        <tr class="table-primary">
-                            <th>Title</th>
-                            <th>Link</th>
-                            <th>Archive</th>
-                            <th>Delete</th>
-                            <th>Safe</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for bookmark in category.bookmark_set.all %}
-                        <tr>
-                            <td><a href="{{bookmark.link}}">{{bookmark.title}}</a></td>
-                            <td>{{bookmark.link|get_host_name}}</td>
-                            <td class="text-center"><a href="{% url 'bookmark:archive' pk=bookmark.pk %}"><i class="fa fa-archive fa-lg"></i></a></td>
-                            <td class="text-center"><a href="#"><i class="fa fa-trash text-danger fa-lg"></i></a></td>
-                            <td class="text-center">
-                                {% if bookmark.safe %}
-                                <i class="fa fa-check-circle fa-lg"></i>
-                                {% else %}
-                                <i class="fa fa-times-circle text-danger fa-lg"></i>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+        <table class="table table-striped table-bordered table-hover table-scroll">
+            <thead>
+            <tr class="table-primary">
+                <th>Title</th>
+                <th>Link</th>
+                <th>Archive</th>
+                <th>Delete</th>
+                <th>Safe</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for bookmark in category.bookmark_set.all %}
+            <tr>
+                <td><a href="{{bookmark.link}}">{{bookmark.title}}</a></td>
+                <td>{{bookmark.link|get_host_name}}</td>
+                <td class="text-center">
+                    <a href="{% url 'bookmark:archive' pk=bookmark.pk %}">
+                        <i class="fa fa-archive fa-lg" data-toggle="tooltip" data-placement="top" title="Archive"></i>
+                    </a>
+                </td>
+                <td class="text-center"><a href="#"><i class="fa fa-trash text-danger fa-lg"></i></a></td>
+                <td class="text-center">
+                    {% if bookmark.safe %}
+                    <i class="fa fa-check-circle fa-lg text-success"></i>
+                    {% else %}
+                    <i class="fa fa-times-circle fa-lg text-danger"></i>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 
 </div>

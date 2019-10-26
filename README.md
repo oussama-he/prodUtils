@@ -25,6 +25,18 @@ Run development server
 
 Access `localhost:8000` in your browser.
 
+# Screenshots
+![Produtils Home Page](./screenshots/produtils-home.png)
+
+![Produtils Home Page](./screenshots/produtils-home-1.png)
+
+![Time Tracker Home Page](./screenshots/time-tracker-home.png)
+
+![Time Tracker New Task](./screenshots/time-tracker-new-task.png)
+
+![Time Tracker Task Details](./screenshots/time-tracker-task-details.png)
+
+
 # License
 Anyone has the right to use this project in accordance with Islamic law and its values.
 

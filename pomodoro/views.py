@@ -15,9 +15,8 @@ TIMEOUT_WORK = 25
 
 
 def get_all_projects(request):
-
     projects = Project.objects.all()
-    return render(request, 'pomodoro/all-tasks.html', {
+    return render(request, 'pomodoro/all-projects.html', {
         "projects": projects,
 })
 
@@ -165,10 +164,10 @@ def finish(request):
     return redirect('/pomodoro/home')
 
 
-def session(request):
+def all_tasks(request):
     # todo: add pagination
     tasks = Task.objects.all()
-    return render(request, 'pomodoro/history.html', {'tasks': tasks})
+    return render(request, 'pomodoro/all-tasks.html', {'tasks': tasks})
 
 
 def delete_task(request, pk):
@@ -259,9 +258,8 @@ def generate_pdf(request):
     return http_response
 
 
-def get_tasks(request, pk):
+def get_project_tasks(request, pk):
     project = Project.objects.get(pk=pk)
-    tasks = project.task_set.all()
-    return render(request, 'pomodoro/tasks.html', {
-        'tasks': tasks,
+    return render(request, 'pomodoro/project-tasks.html', {
+        'project': project,
     })

@@ -1,41 +1,41 @@
 {% extends 'base.html' %}
-{% load static %}
 {% load pomodoro_extras %}
-{% block stylesheet_extras %}
-<link rel="stylesheet" href="{% static 'css/table-panel.css' %}">
-{% endblock stylesheet_extras %}
-
 {% block content %}
-<div class="container">
-  <div class="row">
-    <div class="table-responsive">
-      <div class="col-12">
-        <h2>All Projects</h2>
-        <table class="table table-striped table-bordered table-list">
-          <thead class="table-dark">
-            <tr>
-              <th></th>
-              <th>Project</th>
-              <th>Tasks</th>
-              <th>Passed Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for project in projects %}
-            <tr>
-              <td>{{forloop.counter}}</td>
-              <td>{{project.title|title}}</td>
-              <td>
-                <a href="{% url 'pomodoro:tasks' pk=project.pk %}">See all {{project.task_count}} task{% if project.task_count > 1%}s{% endif %}</a>
-              </td>
-              <td>{{project.passed_time|format_duration}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+
+<div class="row">
+    <div class="col-12">
+        <h2>Tasks
+            <small>
+                <span class="badge badge-pill badge-dark">{{tasks.count}}</span>
+            </small>
+        </h2>
+        <div class="table-responsive">
+            <table id="history" class="table table-striped table-bordered table-hover table-responsive text-left ">
+                <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Task</th>
+                    <th>Project</th>
+                    <th>duration</th>
+                    <th>Sessions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td title="{{task.title}}">{{ task.title|truncatechars:55 }} <a href="{% url 'pomodoro:task-delete' task.pk %}"><i
+                            class="fa fa-trash text-danger"></i></a></td>
+                    <td title="{{task.project.title}}">{{ task.project.title|truncatechars:55 }}</td>
+                    <td>{{ task.duration|format_duration }}</td>
+                    <td><a href="{% url 'pomodoro:task-detail' task.pk %}">See {{task.session_set.all.count}} Session{% if task.session_set.all.count > 1%}s{% endif %}</a></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
 </div>
+
 
 {% endblock content %}

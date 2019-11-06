@@ -30,7 +30,7 @@ class Category(models.Model):
 
 class Expense(models.Model):
     cost = models.IntegerField()
-    timestamp = models.DateField(verbose_name='date')
+    timestamp = models.DateField(verbose_name='date', null=True, blank=True)
     added_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     category = models.ForeignKey('Category')
     notes = models.TextField(blank=True, null=True)

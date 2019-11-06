@@ -4,7 +4,7 @@ from django.utils import timezone
 
 
 class ExpenseForm(forms.ModelForm):
-    timestamp = forms.DateField(initial=timezone.now())
+    timestamp = forms.DateField(initial=timezone.now(), required=False)
 
     class Meta:
         model = Expense

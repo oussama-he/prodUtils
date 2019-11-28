@@ -106,10 +106,16 @@ def add_project(request):
 def task_detail(request, pk):
     task = Task.objects.get(pk=pk)
     session_set = task.session_set.all()
+    completed_sessions_count = session_set.filter(interrupted=False).count()
+    interrupted_sessions_count = session_set.filter(interrupted=True).count()
+    average_time = task.duration / session_set.count()
 
     return render(request, 'pomodoro/task-detail.html', {
-        'histories': session_set,
+        'sessions': session_set,
         'task': task,
+        'completed_sessions_count': completed_sessions_count,
+        'interrupted_sessions_count': interrupted_sessions_count,
+        'average_time': average_time
     })
 
 

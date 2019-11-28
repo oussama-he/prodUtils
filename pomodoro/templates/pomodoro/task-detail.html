@@ -26,37 +26,54 @@
 
 <hr>
 
-<div class="row">
-    <div class="col-sm-12 col-md-6">
-        <h4>
-            <b>Total Duration:</b> {{task.duration|format_duration}}
-        </h4>
-    </div>
-    <div class="col-sm-12 col-md-6">
-        <form action="{% url 'pomodoro:start' %}" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="taskid" value="{{task.id}}">
-            <button class="btn btn-primary btn-sm float-md-right"><i class="fa fa-play-circle-o"></i> New Session</button>
-        </form>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <h4>
+                <b>Total Duration:</b> {{task.duration|format_duration}}
+            </h4>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <form action="{% url 'pomodoro:start' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="taskid" value="{{task.id}}">
+                <button class="btn btn-primary btn-sm float-md-right"><i class="fa fa-play-circle-o"></i> New
+                    Session</button>
+            </form>
+        </div>
+
     </div>
 
+    <div class="row text-center">
+        <div class="col-sm-6 col-md-3">
+            <p><strong>Sessions: </strong>{{sessions.count}}</p>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <p class="text-success"><strong>Completed: </strong>{{completed_sessions_count}}</p>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <p class="text-danger"><strong>Interrupted: </strong>{{interrupted_sessions_count}}</p>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <p><strong>Avg time: </strong>{{average_time|format_duration}}</p>
+        </div>
+    </div>
 </div>
-
 <hr>
 <div class="row">
 
-    {% for history in histories %}
+    {% for session in sessions %}
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
         <div class="card time-tracking">
-            <div class="card-header text-white {% if history.interrupted %}bg-danger{% else %}bg-success{%endif%}">
-                {% if history.interrupted %}<b>Interrupted</b>{% else %}<b>Continued</b>{%endif%}
-                <a href="{% url 'pomodoro:history-delete' history.pk %}" class="pull-right" style="color:white"><i
+            <div class="card-header text-white {% if session.interrupted %}bg-danger{% else %}bg-success{%endif%}">
+                {% if session.interrupted %}<b>Interrupted</b>{% else %}<b>Continued</b>{%endif%}
+                <a href="{% url 'pomodoro:history-delete' session.pk %}" class="pull-right" style="color:white"><i
                         class="fa fa-trash"></i> Delete</a>
             </div>
             <div class="card-body">
-                <p><b>Duration: </b>{{history.get_duration|format_duration}}</p>
-                <p><b>Start Time: </b>{{history.start_time|format_date}}</p>
-                <p><b>Finish Time: </b>{{history.finish_time|format_date}}</p>
+                <p><b>Duration: </b>{{session.get_duration|format_duration}}</p>
+                <p><b>Start Time: </b>{{session.start_time|format_date}}</p>
+                <p><b>Finish Time: </b>{{session.finish_time|format_date}}</p>
             </div>
         </div>
 

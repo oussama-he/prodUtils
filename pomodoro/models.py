@@ -64,6 +64,8 @@ class Session(models.Model):
     finish_time = models.DateTimeField(blank=True, null=True)
     interrupted = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ['-start_time']
     
     def get_duration(self) -> int:
         if self.finish_time is not None:

@@ -150,7 +150,7 @@ def finish(request):
     if request.method == 'POST':
         try:
             task = Task.objects.get(id=request.POST['taskid'])
-            last_session = task.session_set.last()
+            last_session = task.session_set.first()
             last_session.finish_time = timezone.now()
             delta = last_session.finish_time - last_session.start_time
             # to change the value of finish_time field in task model

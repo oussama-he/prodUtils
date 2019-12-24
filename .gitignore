@@ -6,7 +6,8 @@ pomodoro_projects.sql
 pomodoro_tasks.sql
 todo_table.sql
 database.sql
-
+/rendering_forms
+/goog
 
 .DS_Store
 node_modules

@@ -64,3 +64,8 @@ body {
   height: 250px;
   width: 100%
 }
+
+table.table td,
+table.table th {
+  vertical-align: middle;
+}

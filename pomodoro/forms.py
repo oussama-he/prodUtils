@@ -8,6 +8,13 @@ class NewTaskForm(forms.ModelForm):
         fields = ['project', 'title',]
 
 
+class EditTaskForm(forms.ModelForm):
+
+    class Meta:
+        model = Task
+        fields = ['project', 'title']
+
+
 class EditSessionForm(forms.ModelForm):
     class Meta:
         model = Session

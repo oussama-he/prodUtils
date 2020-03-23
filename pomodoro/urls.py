@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'task/(?P<pk>\d+)/detail/$', views.task_detail, name='task-detail'),
     url(r'^task/(?P<pk>\d+)/session/(?P<session_pk>\d+)/$', views.EditSessionView.as_view(), name='edit-session'),
     url(r'task/(?P<pk>\d+)/delete/$', views.delete_task, name='task-delete'),
+    url(r'^task/(?P<pk>\d+)/edit', views.EditTaskView.as_view(), name='task-edit'),
     url(r'history/(?P<pk>\d+)/delete/', views.delete_history, name='history-delete'),
     url(r'generate-pdf/', views.generate_pdf, name='generate-pdf'),
 ]

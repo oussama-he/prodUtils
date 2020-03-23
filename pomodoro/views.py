@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.views.generic import UpdateView
 
 from pomodoro.models import Task, Session, Project
-from .forms import NewTaskForm, NewProjectForm, EditSessionForm
+from .forms import NewTaskForm, NewProjectForm, EditSessionForm, EditTaskForm
 from .utils import calculate_duration, get_tasks_duration, get_task_sessions
 from weasyprint import HTML, CSS
 from datetime import timedelta
@@ -125,6 +125,12 @@ class EditSessionView(UpdateView):
     model = Session
     template_name = 'pomodoro/edit-session.html'
     pk_url_kwarg = 'session_pk'
+
+
+class EditTaskView(UpdateView):
+    form_class = EditTaskForm
+    model = Task
+    template_name = 'pomodoro/task-edit.html'
 
 
 def project_detail(request, pk):

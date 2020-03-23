@@ -17,8 +17,10 @@
         <i class="fa fa-tasks"></i> {{task.title}}
         <span>
             <small>
-                {{task.created_at}}<a href="{% url 'pomodoro:task-delete' task.pk %}"> <i
+                {{task.created_at}}
+                <a href="{% url 'pomodoro:task-delete' task.pk %}"><i
                         class="fa fa-trash text-danger"></i></a>
+                        <a href="{% url 'pomodoro:task-edit' task.pk %}"><i class="fa fa-edit text-success"></i></a>
             </small>
         </span>
     </h2>

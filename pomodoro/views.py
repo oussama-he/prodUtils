@@ -4,9 +4,10 @@ from django.contrib import messages
 from django.utils import timezone
 from django.template.loader import get_template
 from django.http import HttpResponse
+from django.views.generic import UpdateView
 
 from pomodoro.models import Task, Session, Project
-from .forms import NewTaskForm, NewProjectForm
+from .forms import NewTaskForm, NewProjectForm, EditSessionForm
 from .utils import calculate_duration, get_tasks_duration, get_task_sessions
 from weasyprint import HTML, CSS
 from datetime import timedelta
@@ -117,6 +118,13 @@ def task_detail(request, pk):
         'interrupted_sessions_count': interrupted_sessions_count,
         'average_time': average_time
     })
+
+
+class EditSessionView(UpdateView):
+    form_class = EditSessionForm
+    model = Session
+    template_name = 'pomodoro/edit-session.html'
+    pk_url_kwarg = 'session_pk'
 
 
 def project_detail(request, pk):

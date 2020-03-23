@@ -67,8 +67,11 @@
         <div class="card time-tracking">
             <div class="card-header text-white {% if session.interrupted %}bg-danger{% else %}bg-success{%endif%}">
                 {% if session.interrupted %}<b>Interrupted</b>{% else %}<b>Continued</b>{%endif%}
-                <a href="{% url 'pomodoro:history-delete' session.pk %}" class="pull-right" style="color:white"><i
-                        class="fa fa-trash"></i> Delete</a>
+                <div class="pull-right">
+                    <a href="{% url 'pomodoro:history-delete' session.pk %}"><i
+                        class="fa fa-trash text-white"></i></a>
+                <a href="{% url 'pomodoro:edit-session' session.task.pk session.pk %}"><i class="fa fa-edit text-white"></i></a>
+                </div>
             </div>
             <div class="card-body">
                 <p><b>Duration: </b>{{session.get_duration|format_duration}}</p>

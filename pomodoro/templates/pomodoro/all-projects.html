@@ -9,6 +9,7 @@
         <h2>Projects
           <small>
             <span class="badge badge-pill badge-dark">{{projects.count}}</span>
+            <span title="Total Duration">{{total_duration|format_duration}}</span>
           </small>
           <a href="{% url 'pomodoro:new-project' %}" class="btn btn-dark float-right text-bold"><i class="fa fa-plus"></i> New Project</a>
         </h2>

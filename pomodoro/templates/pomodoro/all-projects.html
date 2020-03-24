@@ -5,14 +5,26 @@
 {% block content %}
 <div class="container">
   <div class="row">
-      <div class="col-12">
-        <h2>Projects
-          <small>
-            <span class="badge badge-pill badge-dark">{{projects.count}}</span>
-            <span title="Total Duration">{{total_duration|format_duration}}</span>
-          </small>
-          <a href="{% url 'pomodoro:new-project' %}" class="btn btn-dark float-right text-bold"><i class="fa fa-plus"></i> New Project</a>
-        </h2>
+    <div class="col-12">
+      <h2>Projects
+        <a href="{% url 'pomodoro:new-project' %}" class="btn btn-dark float-sm-right text-bold"><i class="fa fa-plus"></i> New Project</a>
+      </h2>
+    </div>
+  </div>
+ 
+  <div class="row center-panel">
+    <div class="col-12 col-sm-4 col-md-4">
+      <h6><strong>Project count:</strong> {{projects.count}}</h6>
+    </div>
+    <div class="col-12 col-sm-4 col-md-4">
+      <h6><strong>Total duration:</strong> {{total_duration|format_duration}}</h6>
+    </div>
+    <div class="col-12 col-sm-4 col-md-4">
+      <h6><strong>Task count:</strong> {{tasks_count}}</h6>
+    </div>
+  </div>
+     
+      <div class="row">
         <table class="table table-striped table-bordered table-list table-hover">
           <thead class="table-dark">
           <tr>
@@ -26,7 +38,9 @@
           {% for project in projects %}
           <tr>
             <td>{{forloop.counter}}</td>
-            <td>{{project.title|title}}</td>
+            <td>
+              <a href="{% url 'pomodoro:project-detail' project.pk %}">{{project.title|title}}</a>
+            </td>
             <td>
               <a href="{% url 'pomodoro:project-tasks' pk=project.pk %}">See {{project.task_count}} task{% if project.task_count > 1%}s{% endif %}</a>
             </td>
@@ -35,6 +49,7 @@
           {% endfor %}
           </tbody>
         </table>
+      </div>
       </div>
   </div>
 </div>

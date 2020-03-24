@@ -17,12 +17,15 @@ TIMEOUT_WORK = 25
 def get_all_projects(request):
     projects = Project.objects.all()
     total_duration = 0
+    tasks_count = 0
     for project in projects:
         for task in project.task_set.all():
             total_duration += task.duration
+            tasks_count += 1
     return render(request, 'pomodoro/all-projects.html', {
         "projects": projects,
         "total_duration": total_duration,
+        "tasks_count": tasks_count,
 })
 
 

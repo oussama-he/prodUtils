@@ -1,0 +1,21 @@
+{% load pomodoro_extras %}
+
+<div class="center-panel mt-3">
+    <h3>{{period}}</h3>
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-6">
+            <p><strong>Sessions:</strong> {{sessions_count}}</p>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6">
+            <p><strong>Duration:</strong> {{duration|format_duration}}</p>
+        </div>
+   </div>
+   <div class="row">
+       <div class="col-12 col-sm-6 col-md-6">
+           <p class="text-success"><strong>Continued:</strong> {{continued_count}}</p>
+       </div>
+       <div class="col-12 col-sm-6 col-md-6">
+           <p class="text-danger"><strong>Interrupted:</strong> {{interrupted_count}}</p>
+       </div>
+   </div>
+</div>

@@ -1,16 +1,5 @@
 import os
 
-
-def get_task_sessions(sessions):
-    task_histories = dict()
-    for q in sessions:
-        key = (q.task.project.title, q.task)
-        if key in task_histories.keys():
-            task_histories[key].append(q)
-        else:
-            task_histories[key] = [q]
-    return task_histories
-
 # def calculate_duration(queryset) -> int:
 #     total_duration = 0
 #     for obj in queryset:
@@ -23,24 +12,7 @@ def get_task_sessions(sessions):
 #     return total_duration
 
 
-def get_tasks_duration(task_histories: dict) -> dict:
-    task_duration = dict()
-    for key in task_histories.keys():
-        duration = calculate_duration(task_histories[key])
-        task_duration[key] = duration
-    return task_duration
 
-
-def calculate_duration(histories: list) -> int:
-    total_duration = 0
-
-    for history in histories:
-        duration = history.get_duration()
-        if duration == -1:
-            pass
-        total_duration += duration
-
-    return total_duration
 #
 # base_dir = "/home/oussama/Desktop/الفلاش_الدعوي"
 # result = os.scandir(base_dir)

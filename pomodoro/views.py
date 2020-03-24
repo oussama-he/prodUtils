@@ -8,7 +8,6 @@ from django.views.generic import UpdateView
 
 from pomodoro.models import Task, Session, Project
 from .forms import NewTaskForm, NewProjectForm, EditSessionForm, EditTaskForm
-from .utils import calculate_duration, get_tasks_duration, get_task_sessions
 from weasyprint import HTML, CSS
 from datetime import timedelta
 TIMEOUT_WORK = 25
@@ -25,35 +24,35 @@ def get_all_projects(request):
 def home(request):
     # later make these in model manager or something else
 
-    def get_total_duration(task_duration):
+    def get_total_duration(queryset):
         total_duration = 0
-        for value in task_duration.values():
-            total_duration += value
+        for entry in queryset:
+            total_duration += entry.get_duration()
         return total_duration
 
+    def get_sessions_info(sessions):
+        return (get_total_duration(sessions), sessions.count(),
+        sessions.filter(interrupted=False).count(), sessions.filter(interrupted=True).count())
+    
     today_sessions = Session.objects.filter(start_time__date=timezone.now().date())
-    today_task_sessions = get_task_sessions(today_sessions)
-    today_task_duration = get_tasks_duration(today_task_sessions)
-    today_total_duration = get_total_duration(today_task_duration)
+    today_sessions_duration, today_sessions_count,\
+    today_sessions_continued_count, today_sessions_interrupted_count = get_sessions_info(today_sessions)
 
     yesterday_sessions = Session.objects.filter(finish_time__date=timezone.now().date()-timedelta(1))
-    yesterday_task_sessions = get_task_sessions(yesterday_sessions)
-    yesterday_task_duration = get_tasks_duration(yesterday_task_sessions)
-    yesterday_total_duration = get_total_duration(yesterday_task_duration)
+    yesterday_sessions_duration, yesterday_sessions_count,\
+    yesterday_sessions_continued_count, yesterday_sessions_interrupted_count = get_sessions_info(yesterday_sessions)
 
     date = timezone.now().date()
     start_week = date - timedelta(date.weekday())
     end_week = start_week + timedelta(7)
     last_week_sessions = Session.objects.filter(finish_time__range=[start_week, end_week])
-    last_week_task_sessions = get_task_sessions(last_week_sessions)
-    last_week_task_duration = get_tasks_duration(last_week_task_sessions)
-    last_week_total_duration = get_total_duration(last_week_task_duration)
-    
+    last_week_sessions_duration, last_week_sessions_count,\
+    last_week_sessions_continued_count, last_week_sessions_interrupted_count = get_sessions_info(last_week_sessions)
+
     last_month_sessions = Session.objects.filter(finish_time__month=timezone.now().month,
                                                   finish_time__year=timezone.now().year)
-    last_month_task_sessions = get_task_sessions(last_month_sessions)
-    last_month_task_duration = get_tasks_duration(last_month_task_sessions)
-    last_month_total_duration = get_total_duration(last_month_task_duration)
+    last_month_sessions_duration, last_month_sessions_count,\
+    last_month_sessions_continued_count, last_month_sessions_interrupted_count = get_sessions_info(last_month_sessions)
 
     tasks = Task.objects.all()[:7]
     return render(request, 'pomodoro/home.html',

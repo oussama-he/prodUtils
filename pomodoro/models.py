@@ -12,14 +12,14 @@ class Task(models.Model):
 
     @property
     def duration(self) -> int:
-        total_duration = timezone.timedelta(seconds=0)
+        total_duration = 0
         for session in self.session_set.all():
             # perhaps we can add a structure or something else tha have meaning to distinguish the error
             if not session.finish_time:
-                return -1
+                continue
 
-            total_duration += session.finish_time - session.start_time
-        return int(total_duration.total_seconds())
+            total_duration += session.get_duration()
+        return total_duration
 
     def get_absolute_url(self):
         return reverse("pomodoro:task-detail", kwargs={'pk': self.pk})
@@ -70,9 +70,8 @@ class Session(models.Model):
     def get_duration(self) -> int:
         if self.finish_time is not None:
             delta = self.finish_time - self.start_time
-        else:
-               return -1
-        return delta.total_seconds()
+            return int(delta.total_seconds())
+        return 0
     
     def get_absolute_url(self):
         return reverse("pomodoro:task-detail", kwargs={'pk': self.task.pk})

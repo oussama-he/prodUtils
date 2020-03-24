@@ -66,41 +66,14 @@
                     <!-- <button class="btn btn-primary btn-lg" id="startButton" disabled><i class="fa fa-play-circle-o fa-lg"> Start</i></button> -->
                 </form>
             </div>
+
+            {% include 'pomodoro/include/period_stats.html' with period='Today' sessions_count=today_sessions_count duration=today_sessions_duration continued_count=today_sessions_continued_count interrupted_count=today_sessions_interrupted_count %}
+            
+            {% include 'pomodoro/include/period_stats.html' with period='Yesterday' sessions_count=yesterday_sessions_count duration=yesterday_sessions_duration continued_count=yesterday_sessions_continued_count interrupted_count=yesterday_sessions_interrupted_count %}
+
+            {% include 'pomodoro/include/period_stats.html' with period='Last Week' sessions_count=last_week_sessions_count duration=last_week_sessions_duration continued_count=last_week_sessions_continued_count interrupted_count=last_week_sessions_interrupted_count %}
+
+            {% include 'pomodoro/include/period_stats.html' with period='Last Month' sessions_count=last_month_sessions_count duration=last_month_sessions_duration continued_count=last_month_sessions_continued_count interrupted_count=last_month_sessions_interrupted_count %}
         </div>
 </div>
-<hr>
-<div class="row">
-
-    <div class="col-md-12">
-        <style>
-                .col1 {
-                    width: 25%
-                }
-                .col2 {
-                    width: 55%
-                }
-                .col3 {
-                    width: 20%
-                }
-            </style>
-
-        {% if today_task_duration %}
-        {% include 'pomodoro/include/duration-table.html' with total_duration=today_total_duration period='Today' task_duration=today_task_duration %}
-        {% endif %}
-
-        {% if yesterday_task_duration %}
-        {% include 'pomodoro/include/duration-table.html' with total_duration=yesterday_total_duration period='Yesterday' task_duration=yesterday_task_duration %}
-        {% endif %}
-
-        {% if last_week_task_duration %}
-        {% include 'pomodoro/include/duration-table.html' with total_duration=last_week_total_duration period='Last Week' task_duration=last_week_task_duration %}
-        {% endif %}
-
-        {% if last_month_task_duration %}
-        {% include 'pomodoro/include/duration-table.html' with total_duration=last_month_total_duration period='Last Month' task_duration=last_month_task_duration %}
-        {% endif %}
-    </div>
-
-</div>
-
 {% endblock %}

@@ -33,14 +33,12 @@ def get_at_index(list, index):
 @register.filter(name='format_duration')
 def format_duration(value: int) -> str:
     value = int(value)
-    if value == -1:
-        return 'error'
-    elif value < 59:
+    if value < 59:
         return '%.2d Seconds' % value
     else:
         mins, secs = divmod(value, 60)
         hrs, mins = divmod(mins, 60)
-        return '%.2dh:%.2dm' % (hrs, mins)
+        return '%.2dh %.2dm' % (hrs, mins)
 
 
 # @register.filter(name='get_due_date_string')

@@ -194,7 +194,27 @@ def finish(request):
 def all_tasks(request):
     # todo: add pagination
     tasks = Task.objects.all()
-    return render(request, 'pomodoro/all-tasks.html', {'tasks': tasks})
+    session_count = 0
+    total_duration = 0
+    continued_count = 0
+    interrupted_count = 0
+    for task in tasks:
+        session_count += task.session_set.count()
+        total_duration += task.duration
+        for session in task.session_set.all():
+            if session.interrupted:
+                interrupted_count += 1
+            else:
+                continued_count += 1
+    return render(request, 'pomodoro/all-tasks.html', {
+        'tasks': tasks,
+        'session_count': session_count,
+        'total_duration': total_duration,
+        'average_duration': total_duration / session_count,
+        'continued_count': continued_count,
+        'interrupted_count': interrupted_count,
+        'project_count': Project.objects.all().count()
+        })
 
 
 def delete_task(request, pk):

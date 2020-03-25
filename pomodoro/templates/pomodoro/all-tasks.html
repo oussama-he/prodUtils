@@ -10,6 +10,31 @@
             </h2>
         </div>
     </div>
+    <div class="row center-panel">
+        <div class="col-12 col-sm-3 col-md-3">
+            <h6><strong>Task count:</strong> {{tasks.count}}</h6>
+        </div>
+        <div class="col-12 col-sm-3 col-md-3">
+            <h6><strong>Project count:</strong> {{project_count}}</h6>
+        </div>
+        <div class="col-12 col-sm-3 col-md-3">
+            <h6><strong>Session count:</strong> {{session_count}}</h6>
+        </div>
+        <div class="col-12 col-sm-3 col-md-3">
+            <h6><strong>Total duration:</strong> {{total_duration|format_duration}}</h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-sm-4 col-md-4 text-left text-success">
+            <h6><strong>Continued Session:</strong> {{continued_count}}</h6>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 text-center">
+            <h6><strong>Avg. duration per session:</strong> {{average_duration|format_duration}}</h6>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 text-right text-danger">
+            <h6><strong>Interrupted session:</strong> {{interrupted_count}}</h6>
+        </div>
+    </div>
     <div class="row">
         <table class="table table-striped table-bordered table-hover text-left">
             <thead class="table-dark">

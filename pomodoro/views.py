@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.template.loader import get_template
 from django.http import HttpResponse
 from django.views.generic import UpdateView
-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from pomodoro.models import Task, Session, Project
 from .forms import NewTaskForm, NewProjectForm, EditSessionForm, EditTaskForm
 from weasyprint import HTML, CSS
@@ -192,8 +192,8 @@ def finish(request):
 
 
 def all_tasks(request):
-    # todo: add pagination
     tasks = Task.objects.all()
+    task_count = tasks.count()
     session_count = 0
     total_duration = 0
     continued_count = 0
@@ -206,14 +206,25 @@ def all_tasks(request):
                 interrupted_count += 1
             else:
                 continued_count += 1
+
+    paginator = Paginator(tasks, 25)
+    page = request.GET.get('page')
+    try:
+        tasks = paginator.page(page)
+    except PageNotAnInteger:
+        tasks = paginator.page(1)
+    except EmptyPage:
+        tasks = paginator.page(paginator.num_pages)
     return render(request, 'pomodoro/all-tasks.html', {
         'tasks': tasks,
+        'task_count': task_count,
         'session_count': session_count,
         'total_duration': total_duration,
         'average_duration': total_duration / session_count,
         'continued_count': continued_count,
         'interrupted_count': interrupted_count,
-        'project_count': Project.objects.all().count()
+        'project_count': Project.objects.all().count(),
+        'paginator': paginator,
         })
 
 

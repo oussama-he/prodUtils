@@ -16,16 +16,28 @@ TIMEOUT_WORK = 25
 
 def get_all_projects(request):
     projects = Project.objects.all()
+    project_count = projects.count()
     total_duration = 0
     tasks_count = 0
     for project in projects:
         for task in project.task_set.all():
             total_duration += task.duration
             tasks_count += 1
+
+    paginator = Paginator(projects, 25)
+    page = request.GET.get('page')
+    try:
+        projects = paginator.page(page)
+    except PageNotAnInteger:
+        projects = paginator.page(1)
+    except EmptyPage:
+        projects = paginator.page(paginator.num_pages)
     return render(request, 'pomodoro/all-projects.html', {
         "projects": projects,
+        "project_count": project_count,
         "total_duration": total_duration,
         "tasks_count": tasks_count,
+        "paginator": paginator
 })
 
 

@@ -10,10 +10,17 @@ from django.views.generic import UpdateView
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from pomodoro.models import Task, Session, Project
 from .forms import NewTaskForm, NewProjectForm, EditSessionForm, EditTaskForm
-from .utils import get_tasks_info_of_day, get_last_week_days, get_tasks_info_of_days, \
-    get_last_month_days_until_today, get_result_stats
 from weasyprint import HTML, CSS
 from datetime import timedelta
+
+from .utils import (
+    get_tasks_info_of_day,
+    get_last_week_days,
+    get_tasks_info_of_days,
+    get_result_stats,
+    get_last_month_days_until_today
+)
+
 TIMEOUT_WORK = 25
 # TODO: Add the ability to import tasks from todo app
 
@@ -279,6 +286,50 @@ def delete_project(request, pk):
         'object': project,
         'type': 'project',
     })
+
+def period_stats(request, period):
+    if period in ['today', 'yesterday']:
+        return day_period_stats(request, period)
+    elif period == 'last-week':
+        return last_week_stats(request)
+    elif period == 'last-month':
+        return last_month_stats(request)
+    else:
+        raise Http404
+
+
+def day_period_stats(request, period):
+    day = timezone.now() if period == 'today' else timezone.now().date() - timedelta(1)
+    result = get_tasks_info_of_day(day)
+    return render(request, 'pomodoro/day-stats.html', {
+        'period': period,
+        'date': day,
+        'result': result,
+    })
+
+
+def last_week_stats(request):
+    week_days = get_last_week_days()
+    tasks_info = get_tasks_info_of_days(week_days)
+
+    result = get_result_stats(tasks_info)
+    result['start_week'] = week_days[0]
+    result['end_week'] = week_days[6]
+
+    return render(request, 'pomodoro/week-stats.html', {'result': result})
+
+
+def last_month_stats(request):
+    month_days = get_last_month_days_until_today()
+    month_days.sort(reverse=True)
+
+    tasks_info = get_tasks_info_of_days(month_days)
+
+    result = get_result_stats(tasks_info)
+    result['date'] = datetime.date.today()
+
+    return render(request, 'pomodoro/month-stats.html', {'result': result})
+
 # todo: use messages framework to show a message after finishing the timer
 # todo: change notifications to webPush js framework
 

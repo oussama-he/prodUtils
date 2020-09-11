@@ -18,5 +18,6 @@ urlpatterns = [
     url(r'task/(?P<pk>\d+)/delete/$', views.delete_task, name='task-delete'),
     url(r'^task/(?P<pk>\d+)/edit', views.EditTaskView.as_view(), name='task-edit'),
     url(r'history/(?P<pk>\d+)/delete/', views.delete_history, name='history-delete'),
+    url(r'^stats/(?P<period>[\w-]+)', views.period_stats, name='period-stats'),
     url(r'generate-pdf/', views.generate_pdf, name='generate-pdf'),
 ]

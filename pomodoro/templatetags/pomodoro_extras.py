@@ -32,7 +32,11 @@ def get_at_index(list, index):
 
 @register.filter(name='format_duration')
 def format_duration(value: int) -> str:
-    value = int(value)
+    try:
+        value = int(value)
+    except ValueError:
+        return str(value)
+
     if value < 59:
         return f'{value:02d}s'
     elif value < 3600:

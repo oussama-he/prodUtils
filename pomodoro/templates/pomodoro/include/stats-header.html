@@ -1,0 +1,12 @@
+{% load pomodoro_extras %}
+
+<div class="row">
+    <h4><strong>Total duration:</strong> {{result.total_duration|format_duration}}</h4>
+</div>
+
+<div class="row text-center">
+    <div class="col-sm-6 col-md-3"><p><strong>Sessions: </strong>{{result.session_count}}</p></div>
+    <div class="col-sm-6 col-md-3"><p class="text-success"><strong><i class="fa fa-check-circle"></i> Completed: </strong>{{result.continued}}</p></div>
+    <div class="col-sm-6 col-md-3"><p class="text-danger"><strong><i class="fa fa-times-circle"></i> Interrupted: </strong>{{result.interrupted}}</p></div>
+    <div class="col-sm-6 col-md-3"><p><strong>Avg duration: </strong>{{result.avg_duration|format_duration}}</p></div>
+</div>

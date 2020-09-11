@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% load pomodoro_extras %}
+{% block content %}
+<div class="row">
+    <h1><b>Week: </b><small><em>{{result.start_week|date:"D d M"}} - {{result.end_week|date:"D d M"}}</em></small></h1>
+</div>
+<hr>
+
+{% if result.total_duration %}
+
+{% include 'pomodoro/include/stats-header.html' %}
+<hr>
+
+<div class="row">
+    <table class="table">
+        <thead class="table-dark">
+        <tr>
+            <th>Day</th>
+            <th>Sessions</th>
+            <th>Duration</th>
+            <th>Avg duration</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for day, day_info in result.days.items %}
+        <tr>
+            <td><a data-toggle="collapse" href="#collapse{{forloop.counter}}"><i class="fa fa-plus-square"></i></a> {{day|date:"l"}}</td>
+            <td>{{day_info.session_count}}</td>
+            <td>{{day_info.total_duration|format_duration}}</td>
+            <td>{{day_info.avg_duration|format_duration}}</td>
+        </tr>
+        <tr class="collapse" id="collapse{{forloop.counter}}">
+            <td class="text-right">
+                {{day|date:"d F Y"}}
+            </td>
+            <td colspan="3">
+                <table class="table">
+                    <tbody>
+                    {% for task in day_info.tasks %}
+                    <tr>
+                        <td><a href="{% url 'pomodoro:task-detail' task.task.id %}">{{task.task.title}}</a></td>
+                        <td><a href="{% url 'pomodoro:project-detail' task.project.id %}">{{task.project.title}}</a></td>
+                        <td>
+                            <i class="fa fa-check-circle text-success"></i> {{task.sessions.continued}} <i class="fa fa-times-circle text-danger ml-2"></i> {{task.sessions.interrupted}}
+                        </td>
+                        <td>{{task.sessions.duration|format_duration}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+{% include 'pomodoro/include/no-tasks.html' %}
+{% endif %}
+{% endblock %}
+
+{% block scripts_extras %}
+<script>
+$('.collapse')
+    .on('shown.bs.collapse', function() {
+        $(this)
+            .prev()
+            .find(".fa-plus-square")
+            .removeClass("fa-plus-square")
+            .addClass("fa-minus-square");
+            console.log($(this))
+    })
+    .on('hidden.bs.collapse', function() {
+        $(this)
+            .prev()
+            .find(".fa-minus-square")
+            .removeClass("fa-minus-square")
+            .addClass("fa-plus-square");
+    });
+</script>
+{% endblock %}

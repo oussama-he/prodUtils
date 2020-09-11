@@ -1,7 +1,7 @@
 {% load pomodoro_extras %}
 
 <div class="center-panel mt-3">
-    <h3>{{period}}</h3>
+    <h3><a href="{% url 'pomodoro:period-stats' period|slugify%}" title="More info">{{period}}</a></h3>
     <div class="row">
         <div class="col-12 col-sm-6 col-md-6">
             <p><strong>Sessions:</strong> {{sessions_count}}</p>

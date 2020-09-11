@@ -1,4 +1,6 @@
-from django.http import HttpResponseRedirect
+import datetime
+
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
@@ -8,6 +10,8 @@ from django.views.generic import UpdateView
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from pomodoro.models import Task, Session, Project
 from .forms import NewTaskForm, NewProjectForm, EditSessionForm, EditTaskForm
+from .utils import get_tasks_info_of_day, get_last_week_days, get_tasks_info_of_days, \
+    get_last_month_days_until_today, get_result_stats
 from weasyprint import HTML, CSS
 from datetime import timedelta
 TIMEOUT_WORK = 25
@@ -161,12 +165,12 @@ def project_detail(request, pk):
 
 
 def start(request):
-    print('from start def before try block')
     try:
-        print('from start view:', request.POST['taskid'])
         task = Task.objects.get(id=request.POST['taskid'])
         session = Session.objects.create(task=task)
         session.start_time = timezone.now()
+        # save task instance to update last_activity field
+        task.save()
         session.save()
         return render(request,
                       'pomodoro/start.html',
@@ -175,7 +179,6 @@ def start(request):
                        })
     except Exception as e:
         raise e
-    return redirect('/pomodoro/home')
 
 
 def finish(request):
@@ -186,7 +189,7 @@ def finish(request):
             last_session = task.session_set.first()
             last_session.finish_time = timezone.now()
             delta = last_session.finish_time - last_session.start_time
-            # to change the value of finish_time field in task model
+            # save task to update last_activity field of task
             task.save()
 
             if delta.seconds // 60 >= 25:

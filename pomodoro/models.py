@@ -7,7 +7,7 @@ class Task(models.Model):
     title = models.CharField(max_length=50)
     project = models.ForeignKey('Project')
     created_at = models.DateTimeField(auto_now_add=True)
-    last_activity = models.DateTimeField(auto_now_add=False, auto_now=True)
+    last_activity = models.DateTimeField(auto_now_add=False)
     # tags = models.ManyToManyField('tags')
 
     @property

@@ -175,8 +175,9 @@ def start(request):
     try:
         task = Task.objects.get(id=request.POST['taskid'])
         session = Session.objects.create(task=task)
-        session.start_time = timezone.now()
-        # save task instance to update last_activity field
+        start_time = timezone.now()
+        session.start_time = start_time
+        task.last_activity = start_time
         task.save()
         session.save()
         return render(request,
@@ -194,9 +195,10 @@ def finish(request):
         try:
             task = Task.objects.get(id=request.POST['taskid'])
             last_session = task.session_set.first()
-            last_session.finish_time = timezone.now()
-            delta = last_session.finish_time - last_session.start_time
-            # save task to update last_activity field of task
+            finish_time = timezone.now()
+            last_session.finish_time = finish_time
+            delta = finish_time - last_session.start_time
+            task.last_activity = finish_time
             task.save()
 
             if delta.seconds // 60 >= 25:

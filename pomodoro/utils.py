@@ -53,7 +53,7 @@ def get_session_info_of_tasks(session_qs) -> dict:
 
 
 def get_tasks_info_of_day(day) -> dict:
-    session_qs = Session.objects.filter(start_time__date=day)
+    session_qs = Session.objects.filter(start_time__date=datetime.date(2020, 9, 13))
     result = dict(tasks=list(), total_duration=0, interrupted=0, continued=0, session_count=0, avg_duration=0)
 
     if not session_qs.count():
@@ -98,11 +98,9 @@ def get_result_stats(tasks_info) -> dict:
 def get_month_stats(month: int, year=None) -> dict:
     if not year:
         year = timezone.now().date().year
+
     stats = dict(continued=0, interrupted=0, duration=0, avg_duration=0, sessions=0, tasks=0, project=0)
     sessions = Session.objects.filter(start_time__date__month=month, start_time__date__year=year)
-    stats['sessions'] = sessions.count()
-    stats['continued'] = sessions.filter(interrupted=False).count()
-    stats['interrupted'] = sessions.filter(interrupted=True).count()
     # I use the expression below instead of this:
     # Task.objects.filter(last_activity__date__month=month, last_activity__date__year=year).count()
     # because last_activity field of some task entries not updated
@@ -110,6 +108,11 @@ def get_month_stats(month: int, year=None) -> dict:
     stats['projects'] = sessions.values_list('task__project__id', flat=True).distinct().count()
     for session in sessions:
         stats['duration'] += session.get_duration()
+        if session.interrupted:
+            stats['interrupted'] += 1
+        else:
+            stats['continued'] += 1
+    stats['sessions'] = stats['continued'] + stats['interrupted']
     stats['avg_duration'] = stats['duration'] / stats['sessions']
     return stats
 
@@ -129,6 +132,7 @@ def get_last_year_stats():
         stats['interrupted'] += month['interrupted']
     stats['session_count'] = stats['continued'] + stats['interrupted']
     stats['avg_duration'] = stats['total_duration'] / stats['session_count']
+
     return stats
 
 #

@@ -4,13 +4,10 @@ from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
-from django.template.loader import get_template
-from django.http import HttpResponse
 from django.views.generic import UpdateView
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from pomodoro.models import Task, Session, Project
 from .forms import NewTaskForm, NewProjectForm, EditSessionForm, EditTaskForm
-from weasyprint import HTML, CSS
 from datetime import timedelta
 
 from .utils import (
@@ -23,7 +20,6 @@ from .utils import (
 )
 
 TIMEOUT_WORK = 25
-# TODO: Add the ability to import tasks from todo app
 
 
 def get_all_projects(request):
@@ -102,13 +98,6 @@ def add_project(request):
     return render(request, 'pomodoro/new-project.html', {
         'form': form,
     })
-# def new(request):
-#     if request.method == 'POST':
-#         try:
-#             Task.objects.create(name=request.POST['taskname'])
-#         except:
-#             pass
-#     return redirect('/pomodoro/home')
 
 
 def task_detail(request, pk):
@@ -316,56 +305,6 @@ def last_month_stats(request):
 def last_year_stats(request):
     stats = get_last_year_stats()
     return render(request, 'pomodoro/last-year-stats.html', {'stats': stats})
-# todo: use messages framework to show a message after finishing the timer
-# todo: change notifications to webPush js framework
-
-from . import utils
-import os
-def generate_pdf(request):
-    html_template = get_template('pomodoro/dirs.html')
-    user = request.user
-    base_dir = "/home/oussama/Desktop/الفلاش_الدعوي"
-    result = os.scandir(base_dir)
-    result = utils.list_files_name(base_dir, result, sep='')
-    print(result)
-    rendered_html = html_template.render({'request': request, 'you': user, 'result': result}).encode(encoding="UTF-8")
-
-    pdf_file = HTML(string=rendered_html).write_pdf(stylesheets=[CSS(string="""
-    @page {
-    size: a4 portrait;
-    margin: 0mm 0mm 0mm 0mm;
-    counter-increment: page;
-    /*@bottom-center {
-        content: '(c) XX COMPANY - Page ' counter(page);
-        white-space: pre;
-        color: grey;
-    }*/
-    }
-    body {
-        background-color: #263238;
-        font-family: 'Droid arabic naskh';
-    }
-    .dir {
-        /*color: #f0685a;*/
-        color: #FF5370;
-        margin-right: 15px;
-        font-size: 25px;
-    }
-    .file {
-        color: #C3CEE3;
-        margin-right: 40px;
-        font-size: 15px;
-        line-height: 50%;
-    }
-    h1 {
-        color: blue;
-    }
-    """)])
-
-    http_response = HttpResponse(pdf_file, content_type='application/pdf')
-    http_response['Content-Disposition'] = 'filename="report.pdf"'
-
-    return http_response
 
 
 def get_project_tasks(request, pk):

@@ -1,5 +1,4 @@
 import datetime
-import os
 from datetime import timedelta
 
 from django.utils import timezone
@@ -146,45 +145,3 @@ def get_last_year_stats():
     stats['avg_duration'] = stats['total_duration'] / stats['session_count']
 
     return stats
-
-#
-# base_dir = "/home/oussama/Desktop/الفلاش_الدعوي"
-# result = os.scandir(base_dir)
-# dirs_files = dict()
-
-
-def sort_entries(entries):
-    dirs = []
-    files = []
-    for entry in entries:
-        if entry.is_dir():
-            dirs.append(entry)
-        elif entry.is_file():
-            files.append(entry)
-    dirs.sort(key=str)
-    files.sort(key=str)
-    return files + dirs
-
-files = list()
-def list_files_name(base_dir, entries, sep=''):
-
-    entries = sort_entries(entries)
-    for entry in entries:
-        if entry.is_dir():
-            print(entry.name, sep)
-            files.append([entry.name, 'dir'])
-            base_dir = os.path.join(base_dir, entry.name)
-            entries = os.scandir(base_dir)
-            sep += '    '
-            list_files_name(base_dir, entries, sep)
-            base_dir = os.path.split(base_dir)[0]
-            sep = sep[:len(sep)-4]
-
-        elif entry.is_file():
-            file_name = os.path.splitext(entry.name)[0]
-            files.append([file_name, 'file'])
-            print(os.path.splitext(entry.name)[0], sep)
-    return files
-
-# list_files_name(entries=result)
-# print(">>>>>>>>>>>>>>", files[][0])

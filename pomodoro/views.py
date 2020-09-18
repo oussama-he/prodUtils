@@ -14,11 +14,12 @@ from weasyprint import HTML, CSS
 from datetime import timedelta
 
 from .utils import (
+    get_sessions_stats,
     get_tasks_info_of_day,
     get_last_week_days,
     get_tasks_info_of_days,
     get_result_stats,
-    get_last_month_days_until_today, get_last_year_stats
+    get_last_month_days_until_today, get_last_year_stats, get_last_week_range
 )
 
 TIMEOUT_WORK = 25
@@ -53,53 +54,26 @@ def get_all_projects(request):
 
 
 def home(request):
-    # later make these in model manager or something else
+    recent_tasks = Task.objects.all()[:7]
+    stats = dict()
+    today = timezone.now()
 
-    def get_total_duration(queryset):
-        total_duration = 0
-        for entry in queryset:
-            total_duration += entry.get_duration()
-        return total_duration
+    today_sessions = Session.objects.filter(start_time__date=today.date())
+    stats['today'] = get_sessions_stats(today_sessions)
 
-    def get_sessions_info(sessions):
-        return (get_total_duration(sessions), sessions.count(),
-        sessions.filter(interrupted=False).count(), sessions.filter(interrupted=True).count())
+    yesterday_sessions = Session.objects.filter(start_time__date=today.date()-timedelta(1))
+    stats['yesterday'] = get_sessions_stats(yesterday_sessions)
 
-    today_sessions = Session.objects.filter(start_time__date=timezone.now().date())
-    today_sessions_duration, today_sessions_count,\
-    today_sessions_continued_count, today_sessions_interrupted_count = get_sessions_info(today_sessions)
+    last_week_sessions = Session.objects.filter(start_time__range=get_last_week_range())
+    stats['last week'] = get_sessions_stats(last_week_sessions)
 
-    yesterday_sessions = Session.objects.filter(finish_time__date=timezone.now().date()-timedelta(1))
-    yesterday_sessions_duration, yesterday_sessions_count,\
-    yesterday_sessions_continued_count, yesterday_sessions_interrupted_count = get_sessions_info(yesterday_sessions)
+    last_month_sessions = Session.objects.filter(start_time__month=today.month, start_time__year=today.year)
+    stats['last month'] = get_sessions_stats(last_month_sessions)
 
-    date = timezone.now().date()
-    start_week = date - timedelta(date.weekday())
-    end_week = start_week + timedelta(7)
-    last_week_sessions = Session.objects.filter(finish_time__range=[start_week, end_week])
-    last_week_sessions_duration, last_week_sessions_count,\
-    last_week_sessions_continued_count, last_week_sessions_interrupted_count = get_sessions_info(last_week_sessions)
+    last_year_sessions = Session.objects.filter(start_time__year=today.year)
+    stats['last year'] = get_sessions_stats(last_year_sessions)
 
-    last_month_sessions = Session.objects.filter(finish_time__month=timezone.now().month,
-                                                  finish_time__year=timezone.now().year)
-    last_month_sessions_duration, last_month_sessions_count,\
-    last_month_sessions_continued_count, last_month_sessions_interrupted_count = get_sessions_info(last_month_sessions)
-
-    last_year_sessions = Session.objects.filter(start_time__year=timezone.now().year)
-    last_year_sessions_duration, last_year_sessions_count, last_year_sessions_continued_count,\
-    last_year_sessions_interrupted_count = get_sessions_info(last_year_sessions)
-    tasks = Task.objects.all()[:7]
-    return render(request, 'pomodoro/home.html',
-                  # {'tasks': tasks,
-                  #  'today_tasks': today_tasks,
-                  #  'today_duration': today_duration,
-                  #  'yesterday_tasks': yesterday_tasks,
-                  #  ''
-                  #  'last_week_tasks': last_week_tasks,
-                  #  'last_month_tasks': last_month_tasks,
-                  #  }
-                  locals()
-                  )
+    return render(request, 'pomodoro/home.html', {'recent_tasks': recent_tasks, 'stats': stats})
 
 
 def new_task(request):

@@ -7,7 +7,7 @@ from django.utils import timezone
 from .models import Session
 
 
-def get_week_range() -> tuple:
+def get_last_week_range() -> tuple:
     today = timezone.now().date()
     # My week starts on Sunday
     start_week = today - timedelta((today.weekday() + 1) % 7)
@@ -17,7 +17,7 @@ def get_week_range() -> tuple:
 
 def get_last_week_days() -> list:
     days = list()
-    week_range = get_week_range()
+    week_range = get_last_week_range()
     start_week = week_range[0]
     days.append(start_week)
     for i in range(1, 7):
@@ -31,6 +31,18 @@ def get_last_month_days_until_today() -> list:
     year = today_date.year
     month = today_date.month
     return [datetime.date(year, month, day) for day in range(1, today_date.day + 1)]
+
+
+def get_sessions_stats(session_qs) -> dict:
+    stats = dict(duration=0, sessions=0, continued=0, interrupted=0)
+    for session in session_qs:
+        stats['duration'] = session.get_duration()
+        if session.interrupted:
+            stats['interrupted'] += 1
+        else:
+            stats['continued'] += 1
+        stats['sessions'] = stats['continued'] + stats['interrupted']
+    return stats
 
 
 def get_tasks_from_sessions(session_qs) -> dict:

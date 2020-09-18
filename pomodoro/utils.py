@@ -93,6 +93,44 @@ def get_result_stats(tasks_info) -> dict:
     result['avg_duration'] = result['total_duration'] / result['session_count']
     result['days'] = tasks_info
     return result
+
+
+def get_month_stats(month: int, year=None) -> dict:
+    if not year:
+        year = timezone.now().date().year
+    stats = dict(continued=0, interrupted=0, duration=0, avg_duration=0, sessions=0, tasks=0, project=0)
+    sessions = Session.objects.filter(start_time__date__month=month, start_time__date__year=year)
+    stats['sessions'] = sessions.count()
+    stats['continued'] = sessions.filter(interrupted=False).count()
+    stats['interrupted'] = sessions.filter(interrupted=True).count()
+    # I use the expression below instead of this:
+    # Task.objects.filter(last_activity__date__month=month, last_activity__date__year=year).count()
+    # because last_activity field of some task entries not updated
+    stats['tasks'] = sessions.values_list('task__id').distinct().count()
+    stats['projects'] = sessions.values_list('task__project__id', flat=True).distinct().count()
+    for session in sessions:
+        stats['duration'] += session.get_duration()
+    stats['avg_duration'] = stats['duration'] / stats['sessions']
+    return stats
+
+
+def get_last_year_stats():
+    stats = dict(months=dict(), total_duration=0, continued=0, interrupted=0, avg_duration=0)
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+              'August', 'September', 'October', 'November', 'December']
+    passed_months = [i for i in range(1, timezone.now().date().month+1)]
+
+    for month_int, month_str in zip(passed_months, months):
+        stats['months'][month_str] = get_month_stats(month_int)
+
+    for month in stats['months'].values():
+        stats['total_duration'] += month['duration']
+        stats['continued'] += month['continued']
+        stats['interrupted'] += month['interrupted']
+    stats['session_count'] = stats['continued'] + stats['interrupted']
+    stats['avg_duration'] = stats['total_duration'] / stats['session_count']
+    return stats
+
 #
 # base_dir = "/home/oussama/Desktop/الفلاش_الدعوي"
 # result = os.scandir(base_dir)

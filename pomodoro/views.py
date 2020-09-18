@@ -18,7 +18,7 @@ from .utils import (
     get_last_week_days,
     get_tasks_info_of_days,
     get_result_stats,
-    get_last_month_days_until_today
+    get_last_month_days_until_today, get_last_year_stats
 )
 
 TIMEOUT_WORK = 25
@@ -64,7 +64,7 @@ def home(request):
     def get_sessions_info(sessions):
         return (get_total_duration(sessions), sessions.count(),
         sessions.filter(interrupted=False).count(), sessions.filter(interrupted=True).count())
-    
+
     today_sessions = Session.objects.filter(start_time__date=timezone.now().date())
     today_sessions_duration, today_sessions_count,\
     today_sessions_continued_count, today_sessions_interrupted_count = get_sessions_info(today_sessions)
@@ -85,6 +85,9 @@ def home(request):
     last_month_sessions_duration, last_month_sessions_count,\
     last_month_sessions_continued_count, last_month_sessions_interrupted_count = get_sessions_info(last_month_sessions)
 
+    last_year_sessions = Session.objects.filter(start_time__year=timezone.now().year)
+    last_year_sessions_duration, last_year_sessions_count, last_year_sessions_continued_count,\
+    last_year_sessions_interrupted_count = get_sessions_info(last_year_sessions)
     tasks = Task.objects.all()[:7]
     return render(request, 'pomodoro/home.html',
                   # {'tasks': tasks,
@@ -289,6 +292,7 @@ def delete_project(request, pk):
         'type': 'project',
     })
 
+
 def period_stats(request, period):
     if period in ['today', 'yesterday']:
         return day_period_stats(request, period)
@@ -296,6 +300,8 @@ def period_stats(request, period):
         return last_week_stats(request)
     elif period == 'last-month':
         return last_month_stats(request)
+    elif period == 'last-year':
+        return last_year_stats(request)
     else:
         raise Http404
 
@@ -332,6 +338,10 @@ def last_month_stats(request):
 
     return render(request, 'pomodoro/month-stats.html', {'result': result})
 
+
+def last_year_stats(request):
+    stats = get_last_year_stats()
+    return render(request, 'pomodoro/last-year-stats.html', {'stats': stats})
 # todo: use messages framework to show a message after finishing the timer
 # todo: change notifications to webPush js framework
 

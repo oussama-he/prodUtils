@@ -74,6 +74,8 @@
             {% include 'pomodoro/include/period_stats.html' with period='Last Week' sessions_count=last_week_sessions_count duration=last_week_sessions_duration continued_count=last_week_sessions_continued_count interrupted_count=last_week_sessions_interrupted_count %}
 
             {% include 'pomodoro/include/period_stats.html' with period='Last Month' sessions_count=last_month_sessions_count duration=last_month_sessions_duration continued_count=last_month_sessions_continued_count interrupted_count=last_month_sessions_interrupted_count %}
+
+            {% include 'pomodoro/include/period_stats.html' with period='Last Year' sessions_count=last_year_sessions_count duration=last_year_sessions_duration continued_count=last_year_sessions_continued_count interrupted_count=last_year_sessions_interrupted_count %}
         </div>
 </div>
 {% endblock %}

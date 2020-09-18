@@ -5,7 +5,7 @@ from django.utils import timezone
 
 class Task(models.Model):
     title = models.CharField(max_length=50)
-    project = models.ForeignKey('Project')
+    project = models.ForeignKey('Project', related_name='projects')
     created_at = models.DateTimeField(auto_now_add=True)
     last_activity = models.DateTimeField(auto_now_add=True)
     # tags = models.ManyToManyField('tags')
@@ -59,7 +59,7 @@ class Project(models.Model):
 
 
 class Session(models.Model):
-    task = models.ForeignKey('Task', blank=True, null=True)
+    task = models.ForeignKey('Task', blank=True, null=True, related_name='tasks')
     start_time = models.DateTimeField(blank=True, null=True)
     finish_time = models.DateTimeField(blank=True, null=True)
     interrupted = models.BooleanField(default=True)

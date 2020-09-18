@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load pomodoro_extras %}
+
+{% block content %}
+<h1>Last Year: <small><em>{% now 'Y' %}</em></small></h1>
+<hr>
+
+{% if stats.total_duration %}
+
+{% include 'pomodoro/include/stats-header.html' with result=stats %}
+<hr>
+
+<div class="row">
+    <div class="col-12">
+        <table class="table table-striped">
+            <thead class="table-dark">
+            <tr>
+                <th>Month</th>
+                <th>Tasks</th>
+                <th>Projects</th>
+                <th>Sessions</th>
+                <th>Duration</th>
+                <th>Avg. Duration</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for month, stats in stats.months.items %}
+            <tr>
+                <td>{{month}}</td>
+                <td>{{stats.tasks}}</td>
+                <td>{{stats.projects}}</td>
+                <td>{{stats.sessions}}</td>
+                <td>{{stats.duration|format_duration}}</td>
+                <td>{{stats.avg_duration|format_duration}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+{% include 'pomodoro/include/no-tasks.html' %}
+{% endif %}
+{% endblock %}

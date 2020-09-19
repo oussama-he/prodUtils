@@ -64,7 +64,7 @@ def get_session_info_of_tasks(session_qs) -> dict:
 
 
 def get_tasks_info_of_day(day) -> dict:
-    session_qs = Session.objects.filter(start_time__date=datetime.date(2020, 9, 13))
+    session_qs = Session.objects.filter(start_time__date=day)
     result = dict(tasks=list(), total_duration=0, interrupted=0, continued=0, session_count=0, avg_duration=0)
 
     if not session_qs.count():

@@ -175,6 +175,7 @@ def finish(request):
             return render(request,
                           'pomodoro/finish.html',
                           {'task': task,
+                           'session': last_session,
                            'passed_time': delta.seconds,
                            })
         except Exception as e:

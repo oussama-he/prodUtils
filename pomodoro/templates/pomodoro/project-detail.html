@@ -3,39 +3,65 @@
 {% load pomodoro_extras %}
 {% block content %}
 <div class="row">
-    <h2 class="col-12">
-        <strong>{{ project.title }}</strong> <small>{{project.created_at}}</small>
-        <a href="{% url 'pomodoro:project-delete' project.pk %}">
-            <i class="fa fa-trash text-danger"></i>
-        </a>
-    </h2>
-    <h2 class="col-12">
-        <strong>Total duration </strong>{{project.passed_time|format_duration}}
-    </h2>
-</div>
-
-<div class="row">
-
-    {% for task in project.task_set.all %}
-    <div class="col-sm-12 col-md-6 col-lg-4">
-        <div class="card">
-            <div class="card-header text-white bg-dark">
-                <h6 class="float-left" data-toggle='tooltip' data-placement='top' title="{{task.title}}">{{ task.title|truncatechars:25 }}</h6>
-                <div class="float-right">
-                    <a class="text-light" href="{{task.get_absolute_url}}"><i class="fa fa-bar-chart"></i> Detail</a>
-                    <a class="text-light" href="{% url 'pomodoro:task-delete' task.pk %}"><i class="fa fa-trash"></i> Delete</a>
-                </div>
-            </div>
-            <div class="card-body">
-                <p><b>Total Duration: </b>{{task.duration|format_duration}}</p>
-                <p><b>Nbr of Sessions: </b>{{task.session_set.all.count}}<p>
-                <p><b>First Start: </b>{{task.session_set.first.start_time}}</p>
-                <p><b>Last Finish: </b>{{task.session_set.last.finish_time}}</p>
-            </div>
-        </div>
+    <div class="col-12">
+        <h1>
+            {{ project.title }}
+            <small>
+                <a href="#"><i class="fa fa-pencil text-primary"></i></a>
+                <a href="{% url 'pomodoro:project-delete' project.pk %}">
+                    <i class="fa fa-trash text-danger"></i>
+                </a>
+            </small>
+        </h1>
+        <h3><span title="{{project.created_at}}" data-toggle="tooltip">Created: <small>{{project.created_at|timesince}} ago</small></span></h3>
     </div>
-    {% empty %}
-    <p>No Task</p>
-    {% endfor %}
 </div>
+<hr>
+{% if stats.total_duration %}
+
+{% include 'pomodoro/include/stats-header.html' with result=stats %}
+
+<hr>
+<div class="row">
+    <div class="col-12">
+        <table class="table table-striped">
+            <thead class="table-dark">
+            <tr>
+                <th>Task</th>
+                <th>Sessions</th>
+                <th>Duration</th>
+                <th>First Start</th>
+                <th>Last Finish</th>
+                <th class="text-center">Detail</th>
+                <th class="text-center">Delete</th>
+                <th class="text-center">New Session</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for task in project.task_set.all %}
+                <tr>
+                    <td>{{task.title}}</td>
+                    <td>{{task.session_set.all.count}}</td>
+                    <td>{{task.duration|format_duration}}</td>
+                    <td title="{{task.session_set.last.start_time}}" data-toggle="tooltip">{{task.session_set.last.start_time|timesince}}</td>
+                    <td title="{{task.session_set.first.finish_time}}" data-toggle="tooltip">{{task.session_set.first.finish_time|timesince}}</td>
+                    <td>
+                        <a href="{% url 'pomodoro:task-detail' task.pk %}" class="btn btn-outline-primary"><i class="fa fa-info-circle"></i> Detail</a></td>
+                    <td>
+                        <a href="{% url 'pomodoro:task-delete' task.pk %}" class="btn btn-outline-danger"><i class="fa fa-trash"></i> Delete</a></td>
+                    <td>
+                        <form action="{% url 'pomodoro:start' %}" method="post">{% csrf_token %}
+                            <input type="hidden" name="taskid" value="{{task.id}}">
+                            <button class="btn text-primary" type="submit"><i class="fa fa-play-circle"></i> Session</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+{% include 'pomodoro/include/no-tasks.html' %}
+{% endif %}
 {% endblock %}

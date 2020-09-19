@@ -4,10 +4,10 @@
     <h3><a href="{% url 'pomodoro:period-stats' period|slugify%}" title="More info">{{period|title}}</a></h3>
     <div class="row">
         <div class="col-12 col-sm-6 col-md-6">
-            <p><strong>Sessions:</strong> {{info.sessions}}</p>
+            <p><strong>Sessions:</strong> {{info.session_count}}</p>
         </div>
         <div class="col-12 col-sm-6 col-md-6">
-            <p><strong>Duration:</strong> {{info.duration|format_duration}}</p>
+            <p><strong>Duration:</strong> {{info.total_duration|format_duration}}</p>
         </div>
    </div>
    <div class="row">

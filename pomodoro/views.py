@@ -131,9 +131,11 @@ class EditTaskView(UpdateView):
 
 def project_detail(request, pk):
     project = get_object_or_404(Project, pk=pk)
-
+    sessions = Session.objects.filter(task__project__id=pk)
+    stats = get_sessions_stats(sessions)
     return render(request, 'pomodoro/project-detail.html', {
         'project': project,
+        'stats': stats,
     })
 
 

@@ -33,14 +33,16 @@ def get_last_month_days_until_today() -> list:
 
 
 def get_sessions_stats(session_qs) -> dict:
-    stats = dict(duration=0, sessions=0, continued=0, interrupted=0)
+    stats = dict(total_duration=0, session_count=0, continued=0, interrupted=0, avg_duration=0)
     for session in session_qs:
-        stats['duration'] = session.get_duration()
+        stats['total_duration'] += session.get_duration()
         if session.interrupted:
             stats['interrupted'] += 1
         else:
             stats['continued'] += 1
-        stats['sessions'] = stats['continued'] + stats['interrupted']
+    stats['session_count'] = stats['continued'] + stats['interrupted']
+    if stats['session_count']:
+        stats['avg_duration'] = stats['total_duration'] / stats['session_count']
     return stats
 
 

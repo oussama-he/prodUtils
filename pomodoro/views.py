@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.views.generic import UpdateView
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
 from pomodoro.models import Task, Session, Project
 from .forms import NewTaskForm, NewProjectForm, EditSessionForm, EditTaskForm
 from datetime import timedelta
@@ -16,8 +17,10 @@ from .utils import (
     get_last_week_days,
     get_tasks_info_of_days,
     get_result_stats,
-    get_last_month_days_until_today, get_last_year_stats, get_last_week_range
+    get_last_month_days_until_today,
+    get_last_year_stats, get_last_week_range,
 )
+from utils.utils import render_html_to_pdf, generate_html_from_template
 
 TIMEOUT_WORK = 25
 
@@ -280,6 +283,44 @@ def day_period_stats(request, period):
         'date': day,
         'result': result,
     })
+
+
+def generate_period_report(request, period):
+    if period in ['today', 'yesterday']:
+        print(period)
+        today_date = timezone.now().date()
+        date = today_date if period == 'today' else today_date - timedelta(days=1)
+        data = get_tasks_info_of_day(date)
+        data['day'] = date
+        data['report_title'] = "Today Report" if period == 'today' else 'Yesterday Report'
+        template = 'pomodoro/pdf-reports/day-report.html'
+    elif period == 'last-week':
+        week_days = get_last_week_days()
+        stats = get_tasks_info_of_days(week_days)
+        data = get_result_stats(stats)
+        data['start_week'] = week_days[0]
+        data['end_week'] = week_days[-1]
+        data['report_title'] = 'Last Week Report'
+        template = 'pomodoro/pdf-reports/last-week-report.html'
+    elif period == 'last-month':
+        month_days = get_last_month_days_until_today()
+        month_days.sort(reverse=True)
+        stats = get_tasks_info_of_days(month_days)
+        data = get_result_stats(stats)
+        data['report_title'] = 'Last Month Report'
+        template = 'pomodoro/pdf-reports/last-month-report.html'
+    elif period == 'last-year':
+        data = get_last_year_stats()
+        data['period'] = 'Last year'
+        data['report_title'] = 'Last Year Report'
+        template = 'pomodoro/pdf-reports/last-year-report.html'
+    else:
+        data = {}
+        template = 'base-report.html'
+
+    context = {'data': data}
+    html = generate_html_from_template(template, context, request)
+    return render_html_to_pdf(html)
 
 
 def last_week_stats(request):

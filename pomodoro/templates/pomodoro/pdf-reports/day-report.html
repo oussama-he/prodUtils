@@ -1,0 +1,30 @@
+{% extends 'pomodoro/pdf-reports/base.html' %}
+
+{% load pomodoro_extras %}
+
+{% block period %}
+<p><span class="text-gray-600">date:</span> {{data.day|date:"l d F Y"}}</p>
+{% endblock %}
+
+{% block content %}
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Task</th>
+      <th>Project</th>
+      <th>Sessions</th>
+      <th>Duration</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for task in data.tasks %}
+    <tr>
+      <td>{{task.task.title}}</td>
+      <td>{{task.project.title}}</td>
+      <td>{{task.sessions.session_count}}</td>
+      <td>{{task.sessions.duration|format_duration}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

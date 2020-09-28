@@ -1,0 +1,34 @@
+{% extends 'pomodoro/pdf-reports/base.html' %}
+
+{% load pomodoro_extras %}
+
+{% block period %}
+<p><span class="text-gray-600">Period</span> Last year ({% now "Y" %})</p>
+{% endblock %}
+
+{% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Month</th>
+            <th>Tasks</th>
+            <th>Projects</th>
+            <th>Sessions</th>
+            <th>Duration</th>
+            <th>Avg Duration</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for month, info in data.months.items %}
+        <tr>
+            <td>{{month}}</td>
+            <td>{{info.tasks}}</td>
+            <td>{{info.projects}}</td>
+            <td>{{info.sessions}}</td>
+            <td>{{info.duration|format_duration}}</td>
+            <td>{{info.avg_duration|format_duration}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

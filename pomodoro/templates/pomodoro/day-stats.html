@@ -11,40 +11,50 @@
 {% include 'pomodoro/include/stats-header.html' with result=result %}
 <hr>
 
+<div class="row text-right">
+    <div class="col-12">
+        <h1>{{result.period}}</h1>
+        <a href="{% url 'pomodoro:period-report' period|slugify %}" class="btn btn-outline-info" target="_blank"><i class="fa fa-download"></i> PDF</a>
+    </div>
+</div>
 <div class="row">
-    <table class="table table-striped table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th>Task</th>
-            <th>Project</th>
-            <th>Sessions</th>
-            <th>Duration</th>
-            <th>New Session</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for entry in result.tasks %}
-        <tr>
-            <td><a href="{% url 'pomodoro:task-detail' entry.task.id%}">{{entry.task.title}}</a></td>
-            <td><a href="{% url 'pomodoro:project-detail' entry.project.id %}">{{entry.project.title}}</a></td>
-            <td>
-                <div class="d-flex justify-content-around">
-                    <span class="text-success font-weight-bold"><i class="fa fa-check-circle"></i> {{entry.sessions.continued}}</span>
-                    <span class="text-danger font-weight-bold"><i class="fa fa-times-circle"></i> {{entry.sessions.interrupted}}</span>
-                </div>
-            </td>
-            <td>{{entry.sessions.duration|format_duration}}</td>
-            <td>
-                <form action="{% url 'pomodoro:start' %}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" value="{{entry.task.id}}" name="taskid">
-                    <button type="submit" class="btn btn-default text-primary"><i class="fa fa-play-circle"></i> Start</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="col-12">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th>Task</th>
+                <th>Project</th>
+                <th>Sessions</th>
+                <th>Duration</th>
+                <th>New Session</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for entry in result.tasks %}
+            <tr>
+                <td><a href="{% url 'pomodoro:task-detail' entry.task.id%}">{{entry.task.title}}</a></td>
+                <td><a href="{% url 'pomodoro:project-detail' entry.project.id %}">{{entry.project.title}}</a></td>
+                <td>
+                    <div class="d-flex justify-content-around">
+                        <span class="text-success font-weight-bold"><i class="fa fa-check-circle"></i> {{entry.sessions.continued}}</span>
+                        <span class="text-danger font-weight-bold"><i class="fa fa-times-circle"></i> {{entry.sessions.interrupted}}</span>
+                    </div>
+                </td>
+                <td>{{entry.sessions.duration|format_duration}}</td>
+                <td>
+                    <form action="{% url 'pomodoro:start' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{entry.task.id}}" name="taskid">
+                        <button type="submit" class="btn btn-default text-primary"><i class="fa fa-play-circle"></i>
+                            Start
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% else %}
 {% include 'pomodoro/include/no-tasks.html' %}

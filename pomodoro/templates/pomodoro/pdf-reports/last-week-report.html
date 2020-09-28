@@ -1,0 +1,33 @@
+{% extends 'pomodoro/pdf-reports/base.html' %}
+
+{% load pomodoro_extras %}
+
+{% block period%}
+<p>
+    <span class="text-gray-600">Period:</span>
+    Last week {{data.start_week|date:"D d M"}} - {{data.end_week|date:"D d M"}} ({% now "Y" %})
+</p>
+{% endblock %}
+
+{% block content %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Day</th>
+            <th>Sessions</th>
+            <th>Duration</th>
+            <th>Avg Duration</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for day, info in data.days.items %}
+            <tr>
+                <td>{{day|date:"l"}}</td>
+                <td>{{info.session_count}}</td>
+                <td>{{info.total_duration|format_duration}}</td>
+                <td>{{info.avg_duration|format_duration}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

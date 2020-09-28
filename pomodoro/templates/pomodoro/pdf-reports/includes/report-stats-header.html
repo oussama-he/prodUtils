@@ -1,0 +1,12 @@
+{% load pomodoro_extras %}
+<p class="text-lg mb-2"><strong>Total duration: </strong><small>{{data.total_duration|format_duration}}</small></p>
+<table class="w-100 text-center mb-2">
+  <tbody>
+    <tr>
+      <td><strong>Sessions:</strong> {{data.session_count}}</td>
+      <td><strong>Continued:</strong> {{data.continued}}</td>
+      <td><strong>Interrupted:</strong> {{data.interrupted}}</td>
+      <td><strong>Avg duration:</strong> {{data.avg_duration|format_duration}}</td>
+    </tr>
+  </tbody>
+</table>

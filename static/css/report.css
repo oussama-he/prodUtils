@@ -1,0 +1,148 @@
+@font-face {
+    font-family: 'Exo 2';
+    src: url('../fonts/Exo2-SemiBold.woff2') format('woff2'),
+        url('../fonts/Exo2-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Exo 2';
+    src: url('../fonts/Exo2-Regular.woff2') format('woff2'),
+        url('../fonts/Exo2-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Exo 2';
+    src: url('../fonts/Exo2-Italic.woff2') format('woff2'),
+        url('../fonts/Exo2-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+}
+
+:root {
+    --primary-color: #209CEE;
+}
+
+@page:first {
+    @top-left {
+        content: '';
+        background: none;
+        border-bottom: none;
+    }
+}
+
+@page {
+    size: a4 portrait;
+    margin: 1.5cm;
+    font-size: 10pt;
+    counter-increment: page;
+    color: #a9a;
+    @top-left {
+        border-bottom: 0.007cm solid grey;
+        padding-bottom: 0.1cm;
+        margin-bottom: 0.5cm;
+        background-repeat: no-repeat;
+        background-size: 0.5cm;
+        width: 100%;
+        height: 0.5cm;
+    }
+    @bottom-left {
+        content: 'Oussama Heloulou @ Produtils';
+    }
+    @bottom-center {
+        content: 'Page ' counter(page) '-' counter(pages);
+        white-space: pre;
+    }
+}
+
+* {
+    font-family: 'Exo 2';
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    font-size: 12pt;
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+    overflow: hidden;
+}
+
+.table thead {
+    background-color: var(--primary-color);
+    color: #fff;
+    text-align: left;
+}
+
+.table th, .table td {
+    padding: 7pt;
+}
+
+.table tbody tr {
+    border-bottom: 0.5pt solid #dddddd;
+}
+
+.table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.table tbody tr:last-child {
+    border-bottom: 1pt solid ;
+    border-bottom-color: var(--primary-color)
+}
+
+/* Prevent thead and tfoot of the same table to appear in every page */
+thead, tfoot {
+    display: table-row-group;
+}
+
+.logo {
+    width: 40pt;
+    margin-right: 20pt;
+}
+
+/* utilities */
+
+.d-flex {
+    display: flex !important;
+}
+
+.justify-content-between {
+    justify-content: space-between !important;
+}
+
+.align-items-center {
+    align-items: center !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-lg {
+    font-size: 14pt;
+}
+
+.text-4xl {
+    font-size: 30pt;
+}
+
+.text-gray-600 {
+    color: #718096;
+}
+
+.mb-2 {
+    margin-bottom: 10pt;
+}
+
+.w-100 {
+    width: 100%;
+}
+/* end utilities */

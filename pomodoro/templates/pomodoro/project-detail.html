@@ -3,7 +3,7 @@
 {% load pomodoro_extras %}
 {% block content %}
 <div class="row">
-    <div class="col-12">
+    <div class="col-10">
         <h1>
             {{ project.title }}
             <small>
@@ -14,6 +14,9 @@
             </small>
         </h1>
         <h3><span title="{{project.created_at}}" data-toggle="tooltip">Created: <small>{{project.created_at|timesince}} ago</small></span></h3>
+    </div>
+    <div class="col-2 d-flex align-items-center">
+        <a href="{% url 'pomodoro:new' %}" class="btn btn-primary"><i class="fa fa-plus"></i> New Task</a>
     </div>
 </div>
 <hr>

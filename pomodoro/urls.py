@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^project/(?P<pk>\d+)$', views.get_project_tasks, name='project-tasks'),
     url(r'project/(?P<pk>\d+)/delete/', views.delete_project, name='project-delete'),
     url(r'project/(?P<pk>\d+)/detail/', views.project_detail, name='project-detail'),
+    url(r'^project/(?P<pk>\d+)/edit/$', views.EditProjectView.as_view(), name='project-edit'),
     url(r'task/(?P<pk>\d+)/detail/$', views.task_detail, name='task-detail'),
     url(r'^task/(?P<pk>\d+)/session/(?P<session_pk>\d+)/$', views.EditSessionView.as_view(), name='edit-session'),
     url(r'task/(?P<pk>\d+)/delete/$', views.delete_task, name='task-delete'),

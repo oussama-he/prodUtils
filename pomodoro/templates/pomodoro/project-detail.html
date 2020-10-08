@@ -7,7 +7,8 @@
         <h1>
             {{ project.title }}
             <small>
-                <a href="#"><i class="fa fa-pencil text-primary"></i></a>
+                <a href="{% url 'pomodoro:project-edit' project.id %}">
+                    <i class="fa fa-pencil text-primary"></i></a>
                 <a href="{% url 'pomodoro:project-delete' project.pk %}">
                     <i class="fa fa-trash text-danger"></i>
                 </a>

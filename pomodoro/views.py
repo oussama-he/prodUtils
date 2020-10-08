@@ -132,6 +132,12 @@ class EditTaskView(UpdateView):
     template_name = 'pomodoro/task-edit.html'
 
 
+class EditProjectView(UpdateView):
+    form_class = NewProjectForm
+    model = Project
+    template_name = 'pomodoro/project-edit.html'
+
+
 def project_detail(request, pk):
     project = get_object_or_404(Project, pk=pk)
     sessions = Session.objects.filter(task__project__id=pk)

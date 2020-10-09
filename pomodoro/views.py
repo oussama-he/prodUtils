@@ -122,20 +122,20 @@ def task_detail(request, pk):
 class EditSessionView(UpdateView):
     form_class = EditSessionForm
     model = Session
-    template_name = 'pomodoro/edit-session.html'
+    template_name = 'pomodoro/edit-object.html'
     pk_url_kwarg = 'session_pk'
 
 
 class EditTaskView(UpdateView):
     form_class = EditTaskForm
     model = Task
-    template_name = 'pomodoro/task-edit.html'
+    template_name = 'pomodoro/edit-object.html'
 
 
 class EditProjectView(UpdateView):
     form_class = NewProjectForm
     model = Project
-    template_name = 'pomodoro/project-edit.html'
+    template_name = 'pomodoro/edit-object.html'
 
 
 def project_detail(request, pk):

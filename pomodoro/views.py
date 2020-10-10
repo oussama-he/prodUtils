@@ -23,6 +23,7 @@ from .utils import (
 from utils.utils import render_html_to_pdf, generate_html_from_template
 
 TIMEOUT_WORK = 25
+ACTIVE_TASK = {}
 
 
 def get_all_projects(request):
@@ -149,47 +150,44 @@ def project_detail(request, pk):
 
 
 def start(request):
-    try:
-        task = Task.objects.get(id=request.POST['taskid'])
-        session = Session.objects.create(task=task)
-        start_time = timezone.now()
-        session.start_time = start_time
-        task.last_activity = start_time
-        task.save()
-        session.save()
-        return render(request,
-                      'pomodoro/start.html',
-                      {'task': task,
-                       'timeout_work': TIMEOUT_WORK,
-                       })
-    except Exception as e:
-        raise e
+    task = get_object_or_404(Task, pk=request.POST['taskid'])
+    start_time = timezone.now()
+    session = Session.objects.create(task=task, start_time=start_time)
+    task.last_activity = start_time
+    task.save()
+    session.save()
+    ACTIVE_TASK['task'] = task
+    ACTIVE_TASK['session'] = session
+    return render(request,
+                  'pomodoro/start.html',
+                  {'task': task,
+                   'timeout_work': TIMEOUT_WORK,
+                   })
 
 
 def finish(request):
 
     if request.method == 'POST':
         try:
-            task = Task.objects.get(id=request.POST['taskid'])
-            last_session = task.session_set.first()
+            task = ACTIVE_TASK.get('task')
+            session = ACTIVE_TASK.get('session')
             finish_time = timezone.now()
-            last_session.finish_time = finish_time
-            delta = finish_time - last_session.start_time
+            session.finish_time = finish_time
+            delta = finish_time - session.start_time
             task.last_activity = finish_time
             task.save()
 
             if delta.seconds // 60 >= 25:
-                last_session.interrupted = False
-            last_session.save()
+                session.interrupted = False
+            session.save()
             return render(request,
                           'pomodoro/finish.html',
                           {'task': task,
-                           'session': last_session,
+                           'session': session,
                            'passed_time': delta.seconds,
                            })
         except Exception as e:
             raise e
-    messages.success(request, 'The task finished with success.')
     return redirect('/pomodoro/home')
 
 

@@ -14,7 +14,6 @@
                 Stop</button>
             <form id="finishForm" action="{% url 'pomodoro:finish' %}" method="POST">
                 {% csrf_token %}
-                <input type="hidden" name="taskid" value="{{task.id}}" />
             </form>
         </div>
     </div>

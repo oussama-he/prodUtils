@@ -1,10 +1,12 @@
 import datetime
 
-from django.http import HttpResponseRedirect, Http404
+from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.urls import reverse_lazy
 from django.utils import timezone
-from django.views.generic import UpdateView
+from django.views.generic import CreateView, UpdateView, DeleteView
+
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from pomodoro.models import Task, Session, Project
@@ -76,32 +78,18 @@ def home(request):
     return render(request, 'pomodoro/home.html', {'recent_tasks': recent_tasks, 'stats': stats})
 
 
-def new_task(request):
-    if request.method == 'POST':
-        form = NewTaskForm(request.POST)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.save()
-            return redirect('/pomodoro/home')
-    else:
-        form = NewTaskForm()
-
-    return render(request, 'pomodoro/new-task.html', {
-        'form': form,
-    })
+class TaskCreate(CreateView):
+    model = Task
+    form_class = NewTaskForm
+    template_name = "pomodoro/new-task.html"
+    success_url = reverse_lazy("pomodoro:home")
 
 
-def add_project(request):
-    form = NewProjectForm(request.POST or None)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.save()
-        return redirect('/pomodoro/new-task')
-    else:
-        pass
-    return render(request, 'pomodoro/new-project.html', {
-        'form': form,
-    })
+class ProjectCreate(CreateView):
+    model = Project
+    form_class = NewProjectForm
+    template_name = "pomodoro/new-project.html"
+    success_url = reverse_lazy("pomodoro:new")
 
 
 def task_detail(request, pk):
@@ -120,20 +108,20 @@ def task_detail(request, pk):
     })
 
 
-class EditSessionView(UpdateView):
+class SessionEdit(UpdateView):
     form_class = EditSessionForm
     model = Session
     template_name = 'pomodoro/edit-object.html'
     pk_url_kwarg = 'session_pk'
 
 
-class EditTaskView(UpdateView):
+class TaskEdit(UpdateView):
     form_class = EditTaskForm
     model = Task
     template_name = 'pomodoro/edit-object.html'
 
 
-class EditProjectView(UpdateView):
+class ProjectEdit(UpdateView):
     form_class = NewProjectForm
     model = Project
     template_name = 'pomodoro/edit-object.html'
@@ -228,42 +216,26 @@ def all_tasks(request):
         })
 
 
-def delete_task(request, pk):
-    task = get_object_or_404(Task, pk=pk)
+class TaskDelete(DeleteView):
+    model = Task
+    template_name = "pomodoro/delete-object.html"
 
-    if request.method == 'POST':
-        task.delete()
-        return redirect('/pomodoro/home/')
-    return render(request, 'pomodoro/delete-object.html', {
-        'object': task,
-        'type': 'task',
-    })
+    def get_success_url(self):
+        return reverse_lazy("pomodoro:project-detail", kwargs={'pk': self.object.project.id})
 
 
-def delete_history(request, pk):
-    session = get_object_or_404(Session, pk=pk)
+class SessionDelete(DeleteView):
+    model = Session
+    template_name = "pomodoro/delete-object.html"
 
-    if request.method == 'POST':
-        session.delete()
-        return HttpResponseRedirect(session.task.get_absolute_url())
-
-    return render(request, 'pomodoro/delete-object.html', {
-        'object': session,
-        'type:': 'history',
-    })
+    def get_success_url(self):
+        return reverse_lazy("pomodoro:task-detail", kwargs={'pk': self.object.task.id})
 
 
-def delete_project(request, pk):
-    project = get_object_or_404(Project, pk=pk)
-
-    if request.method == 'POST':
-        project.delete()
-        return redirect('/pomodoro/home')
-
-    return render(request, 'pomodoro/delete-object.html', {
-        'object': project,
-        'type': 'project',
-    })
+class ProjectDelete(DeleteView):
+    model = Project
+    template_name = "pomodoro/delete-object.html"
+    success_url = reverse_lazy("pomodoro:home")
 
 
 def period_stats(request, period):

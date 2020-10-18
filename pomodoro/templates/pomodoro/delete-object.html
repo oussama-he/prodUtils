@@ -10,15 +10,11 @@
             <p>
                 Are you sure you want to delete
                 <a href="{{object.get_absolute_url}}" class="text-danger">
-                    <strong>{{object.title|title}}</strong>
+                    <strong>{{object.title}}</strong>
                 </a>
-                {{type}}
             </p>
             <p>
-                <i class="fa fa-exclamation-circle"></i> This means that you will lose all the sessions of
-                <a href="{{object.get_absolute_url}}" class="text-danger">
-                    <strong>{{object.title|title}} {{object|to_class_name}}</strong>
-                </a>
+                <i class="fa fa-exclamation-circle"></i> This means that you will lose this <strong>{{object|to_class_name}}</strong> (and may be related items)
             </p>
         </div>
         <div class="float-right">

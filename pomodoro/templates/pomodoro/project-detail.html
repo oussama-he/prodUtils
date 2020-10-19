@@ -21,7 +21,6 @@
     </div>
 </div>
 <hr>
-{% if stats.total_duration %}
 
 {% include 'pomodoro/include/stats-header.html' with result=stats %}
 
@@ -65,7 +64,8 @@
         </table>
     </div>
 </div>
-{% else %}
-{% include 'pomodoro/include/no-tasks.html' %}
+
+{% if not stats.total_duration %}
+    {% include 'pomodoro/include/no-tasks.html' %}
 {% endif %}
 {% endblock %}

@@ -95,18 +95,13 @@ class ProjectCreate(SuccessMessageMixin, CreateView):
 
 
 def task_detail(request, pk):
-    task = Task.objects.get(pk=pk)
-    session_set = task.session_set.all()
-    completed_sessions_count = session_set.filter(interrupted=False).count()
-    interrupted_sessions_count = session_set.filter(interrupted=True).count()
-    average_time = task.duration / session_set.count()
-
+    task = get_object_or_404(Task, pk=pk)
+    sessions = task.session_set.all()
+    sessions_stats = get_sessions_stats(sessions)
     return render(request, 'pomodoro/task-detail.html', {
-        'sessions': session_set,
+        'sessions': sessions,
         'task': task,
-        'completed_sessions_count': completed_sessions_count,
-        'interrupted_sessions_count': interrupted_sessions_count,
-        'average_time': average_time
+        "sessions_stats": sessions_stats
     })
 
 

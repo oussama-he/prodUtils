@@ -2,17 +2,17 @@ import datetime
 
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import CreateView, UpdateView, DeleteView
-
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from pomodoro.models import Task, Session, Project
 from .forms import NewTaskForm, NewProjectForm, EditSessionForm, EditTaskForm
 from datetime import timedelta
 
+from .mixins import SuccessDeletionMessageMixin
 from .utils import (
     get_sessions_stats,
     get_tasks_info_of_day,
@@ -78,18 +78,20 @@ def home(request):
     return render(request, 'pomodoro/home.html', {'recent_tasks': recent_tasks, 'stats': stats})
 
 
-class TaskCreate(CreateView):
+class TaskCreate(SuccessMessageMixin, CreateView):
     model = Task
     form_class = NewTaskForm
     template_name = "pomodoro/new-task.html"
     success_url = reverse_lazy("pomodoro:home")
+    success_message = "Task Created Successfully."
 
 
-class ProjectCreate(CreateView):
+class ProjectCreate(SuccessMessageMixin, CreateView):
     model = Project
     form_class = NewProjectForm
     template_name = "pomodoro/new-project.html"
     success_url = reverse_lazy("pomodoro:new")
+    success_message = "Project Created Successfully."
 
 
 def task_detail(request, pk):
@@ -108,23 +110,26 @@ def task_detail(request, pk):
     })
 
 
-class SessionEdit(UpdateView):
+class SessionEdit(SuccessMessageMixin, UpdateView):
     form_class = EditSessionForm
     model = Session
     template_name = 'pomodoro/edit-object.html'
     pk_url_kwarg = 'session_pk'
+    success_message = "Session Edited Successfully."
 
 
-class TaskEdit(UpdateView):
+class TaskEdit(SuccessMessageMixin, UpdateView):
     form_class = EditTaskForm
     model = Task
     template_name = 'pomodoro/edit-object.html'
+    success_message = "Task Created Successfully."
 
 
-class ProjectEdit(UpdateView):
+class ProjectEdit(SuccessMessageMixin, UpdateView):
     form_class = NewProjectForm
     model = Project
     template_name = 'pomodoro/edit-object.html'
+    success_message = "Project Edited Successfully."
 
 
 def project_detail(request, pk):
@@ -216,26 +221,29 @@ def all_tasks(request):
         })
 
 
-class TaskDelete(DeleteView):
+class TaskDelete(SuccessDeletionMessageMixin, DeleteView):
     model = Task
     template_name = "pomodoro/delete-object.html"
+    success_message = "Task Deleted Successfully."
 
     def get_success_url(self):
         return reverse_lazy("pomodoro:project-detail", kwargs={'pk': self.object.project.id})
 
 
-class SessionDelete(DeleteView):
+class SessionDelete(SuccessDeletionMessageMixin, DeleteView):
     model = Session
     template_name = "pomodoro/delete-object.html"
+    success_message = "Session Deleted Successfully."
 
     def get_success_url(self):
         return reverse_lazy("pomodoro:task-detail", kwargs={'pk': self.object.task.id})
 
 
-class ProjectDelete(DeleteView):
+class ProjectDelete(SuccessDeletionMessageMixin, DeleteView):
     model = Project
     template_name = "pomodoro/delete-object.html"
     success_url = reverse_lazy("pomodoro:home")
+    success_message = "Project Deleted Successfully."
 
 
 def period_stats(request, period):

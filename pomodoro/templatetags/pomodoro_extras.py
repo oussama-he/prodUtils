@@ -1,6 +1,6 @@
 from django import template
 from django.utils import timezone
-
+from django.contrib.messages.constants import DEBUG, INFO, SUCCESS, WARNING, ERROR
 
 register = template.Library()
 
@@ -24,6 +24,22 @@ def format_date(value):
             return value.strftime("%b %d '%y at %H:%M")
         else:
             return value.strftime('%a %d %b at %H:%M')
+
+
+@register.filter
+def message_heading(level: int):
+    if level == DEBUG:
+        return "Debugging."
+    elif level == INFO:
+        return "Info."
+    elif level == SUCCESS:
+        return "Congratulation."
+    elif level == WARNING:
+        return "Warning."
+    elif level == ERROR:
+        return "Error."
+    return ""
+
 
 @register.filter
 def get_at_index(list, index):

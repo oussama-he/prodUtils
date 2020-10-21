@@ -11,7 +11,7 @@ class Bookmark(models.Model):
     link = models.URLField()
     description = models.TextField(blank=True)
     safe = models.BooleanField(default=False)
-    category = models.ForeignKey('Category')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
     # make safe delete later

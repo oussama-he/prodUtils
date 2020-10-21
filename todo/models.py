@@ -26,7 +26,7 @@ class ToDo(models.Model):
         ('U', 'Urgent'),
     )
     priority = models.CharField(max_length=1, choices=PRIORITY)
-    set = models.ForeignKey(to='Set')
+    set = models.ForeignKey(to='Set', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

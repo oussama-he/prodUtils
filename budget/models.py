@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
 from utils.utils import generate_random_str
@@ -32,7 +32,7 @@ class Expense(models.Model):
     cost = models.IntegerField()
     timestamp = models.DateField(verbose_name='date', null=True, blank=True)
     added_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    category = models.ForeignKey('Category')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):

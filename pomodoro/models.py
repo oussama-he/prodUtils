@@ -1,11 +1,10 @@
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
-from django.utils import timezone
 
 
 class Task(models.Model):
     title = models.CharField(max_length=50)
-    project = models.ForeignKey('Project')
+    project = models.ForeignKey('Project', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     last_activity = models.DateTimeField(auto_now_add=True)
     # tags = models.ManyToManyField('tags')
@@ -59,7 +58,7 @@ class Project(models.Model):
 
 
 class Session(models.Model):
-    task = models.ForeignKey('Task', blank=True, null=True)
+    task = models.ForeignKey('Task', blank=True, null=True, on_delete=models.CASCADE)
     start_time = models.DateTimeField(blank=True, null=True)
     finish_time = models.DateTimeField(blank=True, null=True)
     interrupted = models.BooleanField(default=True)

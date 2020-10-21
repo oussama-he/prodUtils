@@ -21,13 +21,11 @@ from .views import home
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', home,),
-    url(r'^pomodoro/', include('pomodoro.urls', namespace='pomodoro')),
-    url(r'^todo/', include('todo.urls', namespace='todo')),
-    url(r'^reminder', include('reminder.urls', namespace='reminder')),
-    url(r'^bookmark/', include('bookmark.urls', namespace='bookmark')),
-#    url(r'^goog/', include('goog.urls')),
-    url(r'^forms/', include('rendering_forms.urls', namespace='forms')),
-    url(r'^budget/', include('budget.urls', namespace='budget')),
+    url(r'^pomodoro/', include(('pomodoro.urls', 'pomodoro'), namespace='pomodoro')),
+    url(r'^todo/', include(('todo.urls', 'todo'), namespace='todo')),
+    url(r'^reminder', include(('reminder.urls', 'reminder'), namespace='reminder')),
+    url(r'^bookmark/', include(('bookmark.urls', 'bookmark'), namespace='bookmark')),
+    url(r'^budget/', include(('budget.urls', 'budget'), namespace='budget')),
 ]
 
 if settings.DEBUG:

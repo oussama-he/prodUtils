@@ -1,9 +1,35 @@
 import datetime
 from datetime import timedelta
+import tempfile
 
 from django.utils import timezone
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+
+from weasyprint import HTML
 
 from .models import Session
+
+
+def render_html_to_pdf(html):
+    result = html.write_pdf()
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename=report.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output = open(output.name, 'rb')
+        response.write(output.read())
+
+    return response
+
+
+def generate_html_from_template(template: str, context: dict, request):
+    html_string = render_to_string(template, context=context, request=request)
+    return HTML(string=html_string, base_url=request.build_absolute_uri())
 
 
 def get_last_week_range() -> tuple:

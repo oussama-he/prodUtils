@@ -35,26 +35,7 @@
             <li class="nav-item {% if 'pomodoro' in request.path %} active {% endif %}">
                 <a class="nav-link" href="{% url 'pomodoro:home' %}"><i class="fa fa-clock-o"></i> TimeTracking <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item{% if 'todo' in request.path %} active {% endif %}">
-                <a class="nav-link" href="{% url 'todo:home' %}"><i class="fa fa-tasks"></i> ToDo</a>
-            </li>
-            <li class="nav-item{% if 'reminder' in request.path %} active {% endif %}">
-                <a class="nav-link" href="{% url 'reminder:home' %}"><i class="fa fa-calendar"></i> Remainder</a>
-            </li>
-            <li class="nav-item{% if 'bookmark' in request.path %} active {% endif %}">
-                <a href="{% url 'bookmark:home' %}" class="nav-link"> <i class="fa fa-bookmark"></i> Bookmark</a>
-            </li>
-            <li class="nav-item{% if 'budget' in request.path %} active {% endif %}">
-                <a href="{% url 'budget:home' %}" class="nav-link"> <i class="fa fa-money"></i> Budget</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-white" id="univ"></a>
-            </li>
         </ul>
-        <form class="form-inline mt-2 mt-md-0">
-            <input class="form-control mr-sm-2" placeholder="Search" aria-label="Search" type="text">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
     </div>
 </nav>
 {% if messages %}
@@ -78,19 +59,10 @@
 <!-- Placed at the end of the document so the pages load faster -->
     {% block scripts %}
     <script src="{% static 'jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'jquery/jquery.plugin.min.js' %}"></script>
     <script src="{% static 'jquery/jquery.countdown.min.js' %}"></script>
-    <script src="{% static 'js/proper.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
-    <script type="text/javascript">
-		$("#univ")
-			.countdown("2018/09/01", function(event) {
-			$(this).text(
-				event.strftime('%D days %H:%M:%S')
-			);
-		});
-    </script>
     {% endblock scripts %}
 
     {% block scripts_extras%}

@@ -14,15 +14,10 @@ from datetime import timedelta
 
 from .mixins import SuccessDeletionMessageMixin
 from .utils import (
-    get_sessions_stats,
-    get_tasks_info_of_day,
-    get_last_week_days,
-    get_tasks_info_of_days,
-    get_result_stats,
-    get_last_month_days_until_today,
-    get_last_year_stats, get_last_week_range,
+    get_sessions_stats, get_tasks_info_of_day, get_last_week_days, get_tasks_info_of_days, get_result_stats,
+    get_last_month_days_until_today, get_last_year_stats, get_last_week_range, generate_html_from_template,
+    render_html_to_pdf,
 )
-from utils.utils import render_html_to_pdf, generate_html_from_template
 
 TIMEOUT_WORK = 25
 ACTIVE_TASK = {}
@@ -328,10 +323,3 @@ def last_month_stats(request):
 def last_year_stats(request):
     stats = get_last_year_stats()
     return render(request, 'pomodoro/last-year-stats.html', {'stats': stats})
-
-
-def get_project_tasks(request, pk):
-    project = Project.objects.get(pk=pk)
-    return render(request, 'pomodoro/project-tasks.html', {
-        'project': project,
-    })

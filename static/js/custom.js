@@ -13,7 +13,6 @@ $(document).ready(function() {
 
         // Set task id
         $("#taskid").val($(this).data("id"));
-        console.log('from custom.js', $(this).data("id"))
         // Enable start button
         $("#startButton").prop("disabled", false);
     });

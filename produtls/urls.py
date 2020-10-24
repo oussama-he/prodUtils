@@ -13,23 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
+from django.urls import path, include
 from django.contrib import admin
-from django.conf import settings
-from .views import home
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^$', home,),
-    url(r'^pomodoro/', include(('pomodoro.urls', 'pomodoro'), namespace='pomodoro')),
-    url(r'^todo/', include(('todo.urls', 'todo'), namespace='todo')),
-    url(r'^reminder', include(('reminder.urls', 'reminder'), namespace='reminder')),
-    url(r'^bookmark/', include(('bookmark.urls', 'bookmark'), namespace='bookmark')),
-    url(r'^budget/', include(('budget.urls', 'budget'), namespace='budget')),
+    path("admin/", admin.site.urls),
+    path("pomodoro/", include(('pomodoro.urls', 'pomodoro'), namespace='pomodoro')),
 ]
-
-if settings.DEBUG:
- #   import debug_toolbar
-    urlpatterns = [
-#        url(r'^__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns

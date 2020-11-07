@@ -18,7 +18,7 @@ class EditTaskForm(forms.ModelForm):
 class EditSessionForm(forms.ModelForm):
     class Meta:
         model = Session
-        fields = ['task', 'start_time', 'finish_time', 'interrupted']
+        fields = ['task', 'start_time', 'finish_time',]
 
 
 class NewProjectForm(forms.ModelForm):

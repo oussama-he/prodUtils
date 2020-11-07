@@ -1,3 +1,4 @@
+from django.db.models import DateTimeField
 from django.urls import reverse
 from django.db import models
 
@@ -61,7 +62,6 @@ class Session(models.Model):
     task = models.ForeignKey('Task', blank=True, null=True, on_delete=models.CASCADE)
     start_time = models.DateTimeField(blank=True, null=True)
     finish_time = models.DateTimeField(blank=True, null=True)
-    interrupted = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['-start_time']
@@ -71,7 +71,17 @@ class Session(models.Model):
             delta = self.finish_time - self.start_time
             return int(delta.total_seconds())
         return 0
-    
+
+    @property
+    def interrupted(self):
+        """
+        Checks if the session is 25 minutes or more
+        :rtype: bool
+        """
+        if self.get_duration() >= 25*60:
+            return False
+        return True
+
     def get_absolute_url(self):
         return reverse("pomodoro:task-detail", kwargs={'pk': self.task.pk})
     

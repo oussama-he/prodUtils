@@ -160,8 +160,6 @@ def finish(request):
             task.last_activity = finish_time
             task.save()
 
-            if delta.seconds // 60 >= 25:
-                session.interrupted = False
             session.save()
             return render(request,
                           'pomodoro/finish.html',

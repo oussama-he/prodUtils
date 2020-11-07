@@ -13,10 +13,6 @@ class Task(models.Model):
     def duration(self) -> int:
         total_duration = 0
         for session in self.session_set.all():
-            # perhaps we can add a structure or something else tha have meaning to distinguish the error
-            if not session.finish_time:
-                continue
-
             total_duration += session.duration
         return total_duration
 

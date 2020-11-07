@@ -61,7 +61,7 @@ def get_last_month_days_until_today() -> list:
 def get_sessions_stats(session_qs) -> dict:
     stats = dict(total_duration=0, session_count=0, continued=0, interrupted=0, avg_duration=0)
     for session in session_qs:
-        stats['total_duration'] += session.get_duration()
+        stats['total_duration'] += session.duration
         if session.interrupted:
             stats['interrupted'] += 1
         else:
@@ -82,7 +82,7 @@ def get_tasks_from_sessions(session_qs) -> dict:
 def get_session_info_of_tasks(session_qs) -> dict:
     tasks = get_tasks_from_sessions(session_qs)
     for session in session_qs:
-        tasks[session.task]['duration'] += session.get_duration()
+        tasks[session.task]['duration'] += session.duration
         tasks[session.task]['session_count'] += 1
         if session.interrupted:
             tasks[session.task]['interrupted'] += 1
@@ -147,7 +147,7 @@ def get_month_stats(month: int, year=None) -> dict:
     stats['tasks'] = sessions.values_list('task__id').distinct().count()
     stats['projects'] = sessions.values_list('task__project__id', flat=True).distinct().count()
     for session in sessions:
-        stats['duration'] += session.get_duration()
+        stats['duration'] += session.duration
         if session.interrupted:
             stats['interrupted'] += 1
         else:

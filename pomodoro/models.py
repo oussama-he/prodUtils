@@ -1,4 +1,3 @@
-from django.db.models import DateTimeField
 from django.urls import reverse
 from django.db import models
 
@@ -18,7 +17,7 @@ class Task(models.Model):
             if not session.finish_time:
                 continue
 
-            total_duration += session.get_duration()
+            total_duration += session.duration
         return total_duration
 
     def get_absolute_url(self):
@@ -65,8 +64,9 @@ class Session(models.Model):
 
     class Meta:
         ordering = ['-start_time']
-    
-    def get_duration(self) -> int:
+
+    @property
+    def duration(self) -> int:
         if self.finish_time is not None:
             delta = self.finish_time - self.start_time
             return int(delta.total_seconds())
@@ -78,7 +78,7 @@ class Session(models.Model):
         Checks if the session is 25 minutes or more
         :rtype: bool
         """
-        if self.get_duration() >= 25*60:
+        if self.duration >= 25*60:
             return False
         return True
 

@@ -10,7 +10,7 @@
             <h1 class="mb-3">{{task.title}}</h1>
             <h3 class="mb-3"><i class="fa fa-cubes"></i> {{task.project.title}}</h3>
             <h2>
-                Passed time: {{session.get_duration|format_duration}}
+                Passed time: {{session.duration|format_duration}}
                 <small>
                     <a href="{% url 'pomodoro:edit-session' task.id session.id %}" title="Remove this session" data-toggle="tooltip">
                         <i class="fa fa-pencil"></i></a>

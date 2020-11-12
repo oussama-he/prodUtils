@@ -42,6 +42,13 @@ class Project(models.Model):
     def task_count(self):
         return self.task_set.count()
 
+    @property
+    def session_count(self) -> int:
+        total = 0
+        for task in self.task_set.all():
+            total += task.session_set.count()
+        return total
+        
     def passed_time(self):
         task_set = self.task_set.all()
         duration = 0

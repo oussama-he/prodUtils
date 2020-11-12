@@ -14,14 +14,17 @@
   </div>
 
   <div class="row">
-    <div class="col-12 col-sm-4 col-md-4 text-left">
+    <div class="col-12 col-sm-6 col-md-3 text-sm-center">
       <h6><strong>Project count:</strong> {{project_count}}</h6>
     </div>
-    <div class="col-12 col-sm-4 col-md-4 text-center">
+    <div class="col-12 col-sm-6 col-md-3 text-center">
       <h6><strong>Total duration:</strong> {{total_duration|format_duration}}</h6>
     </div>
-    <div class="col-12 col-sm-4 col-md-4 text-right">
-      <h6><strong>Task count:</strong> {{tasks_count}}</h6>
+    <div class="col-12 col-sm-6 col-md-3 text-center">
+      <h6><strong>Task count:</strong> {{task_count}}</h6>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3 text-sm-center text-right">
+      <h6><strong>Session count:</strong> {{session_count}}</h6>
     </div>
   </div>
 
@@ -35,7 +38,8 @@
           <th>#</th>
           <th>Project</th>
           <th>Tasks</th>
-          <th>Passed Time</th>
+          <th>Sessions</th>
+          <th>Total Duration</th>
         </tr>
       </thead>
       <tbody>
@@ -43,12 +47,10 @@
         <tr>
           <td>{{forloop.counter}}</td>
           <td>
-            <a href="{% url 'pomodoro:project-detail' project.pk %}">{{project.title|title}}</a>
+            <a href="{% url 'pomodoro:project-detail' project.pk %}">{{project.title}}</a>
           </td>
-          <td>
-            <a href="{% url 'pomodoro:project-tasks' pk=project.pk %}">See {{project.task_count}}
-              task{% if project.task_count > 1%}s{% endif %}</a>
-          </td>
+          <td>{{project.task_count}}</td>
+          <td>{{project.session_count}}</td>
           <td>{{project.passed_time|format_duration}}</td>
         </tr>
         {% endfor %}

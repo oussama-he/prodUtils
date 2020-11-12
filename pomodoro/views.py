@@ -27,14 +27,16 @@ def get_all_projects(request):
     projects = Project.objects.all()
     project_count = projects.count()
     total_duration = 0
-    tasks_count = 0
+    task_count = 0
+    session_count = 0
     for project in projects:
-        for task in project.task_set.all():
-            total_duration += task.duration
-            tasks_count += 1
+        task_count += project.task_count
+        total_duration += project.passed_time()
+        session_count += project.session_count
 
     paginator = Paginator(projects, 25)
     page = request.GET.get('page')
+    
     try:
         projects = paginator.page(page)
     except PageNotAnInteger:
@@ -45,7 +47,8 @@ def get_all_projects(request):
         "projects": projects,
         "project_count": project_count,
         "total_duration": total_duration,
-        "tasks_count": tasks_count,
+        "task_count": task_count,
+        "session_count": session_count,
         "paginator": paginator
 })
 

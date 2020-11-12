@@ -31,7 +31,7 @@ def get_all_projects(request):
     session_count = 0
     for project in projects:
         task_count += project.task_count
-        total_duration += project.passed_time()
+        total_duration += project.total_duration
         session_count += project.session_count
 
     paginator = Paginator(projects, 25)

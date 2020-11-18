@@ -42,7 +42,7 @@
             </h4>
         </div>
         <div class="col-sm-12 col-md-6">
-            <form action="{% url 'pomodoro:start' %}" method="post">
+            <form action="{% url 'pomodoro:session-create' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="taskid" value="{{task.id}}">
                 <button class="btn btn-primary btn-sm float-md-right"><i class="fa fa-play-circle-o"></i> New
@@ -76,9 +76,9 @@
             <div class="card-header text-white {% if session.interrupted %}bg-danger{% else %}bg-success{%endif%}">
                 {% if session.interrupted %}<b>Interrupted</b>{% else %}<b>Continued</b>{%endif%}
                 <div class="pull-right">
-                    <a href="{% url 'pomodoro:history-delete' session.pk %}"><i
+                    <a href="{% url 'pomodoro:session-delete' session.pk %}"><i
                         class="fa fa-trash text-white"></i></a>
-                <a href="{% url 'pomodoro:edit-session' session.task.pk session.pk %}"><i class="fa fa-edit text-white"></i></a>
+                <a href="{% url 'pomodoro:session-edit' session.pk %}"><i class="fa fa-edit text-white"></i></a>
                 </div>
             </div>
             <div class="card-body">

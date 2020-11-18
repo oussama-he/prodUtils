@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <h2>Tasks
-                <a href="{% url 'pomodoro:new' %}" class="btn btn-dark text-bold float-md-right"><i
+                <a href="{% url 'pomodoro:task-create' %}" class="btn btn-dark text-bold float-md-right"><i
                         class="fa fa-plus"></i> New Task</a>
             </h2>
         </div>
@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="row justify-content-end mt-2">
-        {% include 'pomodoro/include/pagination.html' with object_list=tasks paginator=paginator page_url='pomodoro:all-tasks' %}
+        {% include 'pomodoro/include/pagination.html' with object_list=tasks paginator=paginator page_url='pomodoro:task-list' %}
     </div>
         <div class="row">
         <table class="table table-striped table-bordered table-hover text-left">
@@ -59,7 +59,7 @@
                             href="{{task.project.get_absolute_url}}">{{ task.project.title|truncatechars:55 }}</a></td>
                     <td>{{ task.duration|format_duration }}</td>
                     <td class="text-center">
-                        <form action="{% url 'pomodoro:start' %}" method="post">{% csrf_token %}
+                        <form action="{% url 'pomodoro:session-create' %}" method="post">{% csrf_token %}
                             <input type="hidden" name="taskid" id="taskid" value="{{task.pk}}">
                             <button type="submit" class="btn btn-default text-primary">
                                 <i class='fa fa-play-circle'></i>
@@ -73,7 +73,7 @@
         </table>
     </div>
     <div class="row justify-content-end mt-2">
-        {% include 'pomodoro/include/pagination.html' with object_list=tasks paginator=paginator page_url='pomodoro:all-tasks' %}
+        {% include 'pomodoro/include/pagination.html' with object_list=tasks paginator=paginator page_url='pomodoro:task-list' %}
     </div>
 </div>
 

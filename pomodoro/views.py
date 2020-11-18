@@ -88,7 +88,7 @@ class ProjectCreate(SuccessMessageMixin, CreateView):
     model = Project
     form_class = NewProjectForm
     template_name = "pomodoro/new-project.html"
-    success_url = reverse_lazy("pomodoro:new")
+    success_url = reverse_lazy("pomodoro:task-create")
     success_message = "Project Created Successfully."
 
 
@@ -107,7 +107,6 @@ class SessionEdit(SuccessMessageMixin, UpdateView):
     form_class = EditSessionForm
     model = Session
     template_name = 'pomodoro/edit-object.html'
-    pk_url_kwarg = 'session_pk'
     success_message = "Session Edited Successfully."
 
 

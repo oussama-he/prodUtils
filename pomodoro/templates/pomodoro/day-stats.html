@@ -42,7 +42,7 @@
                 </td>
                 <td>{{entry.sessions.duration|format_duration}}</td>
                 <td>
-                    <form action="{% url 'pomodoro:start' %}" method="post">
+                    <form action="{% url 'pomodoro:session-create' %}" method="post">
                         {% csrf_token %}
                         <input type="hidden" value="{{entry.task.id}}" name="taskid">
                         <button type="submit" class="btn btn-default text-primary"><i class="fa fa-play-circle"></i>

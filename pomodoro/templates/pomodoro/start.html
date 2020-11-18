@@ -12,7 +12,7 @@
             <button class="btn btn-danger btn-lg" name="btn-stop" id="btn-stop">
                 <i class='fa fa-stop'></i>
                 Stop</button>
-            <form id="finishForm" action="{% url 'pomodoro:finish' %}" method="POST">
+            <form id="finishForm" action="{% url 'pomodoro:session-finish' %}" method="POST">
                 {% csrf_token %}
             </form>
         </div>

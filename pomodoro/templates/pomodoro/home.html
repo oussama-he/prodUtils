@@ -9,13 +9,13 @@
         <h2 class="sub-header">
             <i class="fa fa-fire"> Recent Tasks</i>
             <span class='pull-right'>
-            <a href="{% url 'pomodoro:new' %}" class="btn btn-default text-primary" id="newTaskButton">
+            <a href="{% url 'pomodoro:task-create' %}" class="btn btn-default text-primary" id="newTaskButton">
                 <span class="fa fa-plus"> New Task</span>
             </a>
-            <a href="{% url 'pomodoro:projects' %}" class="btn btn-default text-primary" role="button">
+            <a href="{% url 'pomodoro:project-list' %}" class="btn btn-default text-primary" role="button">
                 <span class="fa fa-cubes"> Projects</span>
             </a>
-            <a href="{% url 'pomodoro:all-tasks' %}" class="btn btn-default text-primary">
+            <a href="{% url 'pomodoro:task-list' %}" class="btn btn-default text-primary">
                 <span class="fa fa-list"> Tasks</span>
             </a>
         </span>
@@ -46,7 +46,7 @@
             <h2 class="sub-header">
                 Click a task and hit start button
             </h2>
-            <form action="{% url 'pomodoro:start' %}" method="post">{% csrf_token %}
+            <form action="{% url 'pomodoro:session-create' %}" method="post">{% csrf_token %}
                 <input type="hidden" name="taskid" id="taskid">
                 <button type="submit" class="btn btn-primary btn-lg" onclick="submit()" id="startButton" disabled>
                     <i class='fa fa-play-circle'></i>

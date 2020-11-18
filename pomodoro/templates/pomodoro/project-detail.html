@@ -17,7 +17,7 @@
         <h3><span title="{{project.created_at}}" data-toggle="tooltip">Created: <small>{{project.created_at|timesince}} ago</small></span></h3>
     </div>
     <div class="col-2 d-flex align-items-center">
-        <a href="{% url 'pomodoro:new' %}" class="btn btn-primary"><i class="fa fa-plus"></i> New Task</a>
+        <a href="{% url 'pomodoro:task-create' %}" class="btn btn-primary"><i class="fa fa-plus"></i> New Task</a>
     </div>
 </div>
 <hr>
@@ -53,7 +53,7 @@
                     <td>
                         <a href="{% url 'pomodoro:task-delete' task.pk %}" class="btn btn-outline-danger"><i class="fa fa-trash"></i> Delete</a></td>
                     <td>
-                        <form action="{% url 'pomodoro:start' %}" method="post">{% csrf_token %}
+                        <form action="{% url 'pomodoro:session-create' %}" method="post">{% csrf_token %}
                             <input type="hidden" name="taskid" value="{{task.id}}">
                             <button class="btn text-primary" type="submit"><i class="fa fa-play-circle"></i> Session</button>
                         </form>

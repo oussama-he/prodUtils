@@ -18,5 +18,5 @@ from django.contrib import admin
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("pomodoro/", include(('pomodoro.urls', 'pomodoro'), namespace='pomodoro')),
+    path("", include(('pomodoro.urls', 'pomodoro'), namespace='pomodoro')),
 ]

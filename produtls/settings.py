@@ -39,6 +39,7 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'pomodoro',
+    'users',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -107,6 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "users.User"
 
 # Internationalization
 # https://docs.djangoproject.com/en/stable/topics/i18n/
